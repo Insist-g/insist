@@ -1,7 +1,7 @@
 import 'package:flutter_ducafecat_news_getx/common/apis/apis.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/entities.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import 'index.dart';
 

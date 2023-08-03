@@ -7,7 +7,7 @@ import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:get/get.dart';
-import 'package:uni_links/uni_links.dart';
+// import 'package:uni_links/uni_links.dart';
 
 import 'index.dart';
 
@@ -46,42 +46,42 @@ class ApplicationController extends GetxController {
   bool isInitialUriIsHandled = false;
   StreamSubscription? uriSub;
 
-  // 第一次打开
-  Future<void> handleInitialUri() async {
-    if (!isInitialUriIsHandled) {
-      isInitialUriIsHandled = true;
-      try {
-        final uri = await getInitialUri();
-        if (uri == null) {
-          print('no initial uri');
-        } else {
-          // 这里获取了 scheme 请求
-          print('got initial uri: $uri');
-        }
-      } on PlatformException {
-        print('falied to get initial uri');
-      } on FormatException catch (err) {
-        print('malformed initial uri, ' + err.toString());
-      }
-    }
-  }
-
-  // 程序打开时介入
-  void handleIncomingLinks() {
-    if (!kIsWeb) {
-      uriSub = uriLinkStream.listen((Uri? uri) {
-        // 这里获取了 scheme 请求
-        print('got uri: $uri');
-
-        // if (uri!.pathSegments[1].toLowerCase() == 'category') {
-        if (uri != null && uri.path == '/notify/category') {
-          Get.toNamed(AppRoutes.Category);
-        }
-      }, onError: (Object err) {
-        print('got err: $err');
-      });
-    }
-  }
+  // // 第一次打开
+  // Future<void> handleInitialUri() async {
+  //   if (!isInitialUriIsHandled) {
+  //     isInitialUriIsHandled = true;
+  //     try {
+  //       final uri = await getInitialUri();
+  //       if (uri == null) {
+  //         print('no initial uri');
+  //       } else {
+  //         // 这里获取了 scheme 请求
+  //         print('got initial uri: $uri');
+  //       }
+  //     } on PlatformException {
+  //       print('falied to get initial uri');
+  //     } on FormatException catch (err) {
+  //       print('malformed initial uri, ' + err.toString());
+  //     }
+  //   }
+  // }
+  //
+  // // 程序打开时介入
+  // void handleIncomingLinks() {
+  //   if (!kIsWeb) {
+  //     uriSub = uriLinkStream.listen((Uri? uri) {
+  //       // 这里获取了 scheme 请求
+  //       print('got uri: $uri');
+  //
+  //       // if (uri!.pathSegments[1].toLowerCase() == 'category') {
+  //       if (uri != null && uri.path == '/notify/category') {
+  //         Get.toNamed(AppRoutes.Category);
+  //       }
+  //     }, onError: (Object err) {
+  //       print('got err: $err');
+  //     });
+  //   }
+  // }
 
   /// 生命周期
 

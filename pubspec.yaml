@@ -28,65 +28,62 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
 
   # GetX
-  get: ^4.1.4
+  get: ^4.6.5
 
   # 日期
-  intl: ^0.17.0
+  intl: ^0.18.0
 
   # 屏幕适配
-  flutter_screenutil: ^5.0.0+2
+  flutter_screenutil: ^5.8.4
 
   # 下拉刷新
-  pull_to_refresh: ^2.0.0
+  pull_to_refresh_flutter3: ^2.0.1
 
   # toast
-  fluttertoast: ^8.0.7
+  fluttertoast: ^8.2.2
 
   # easyloading
-  flutter_easyloading: ^3.0.3
+  flutter_easyloading: ^3.0.5
 
   # http
-  dio: ^4.0.0
-  dio_cookie_manager: ^2.0.0
-  cookie_jar: ^3.0.1
+  dio: ^5.3.2
+  dio_cookie_manager: ^3.1.0+1
+  cookie_jar: ^4.0.8
 
   # 缓存
-  shared_preferences: ^2.0.5
-  cached_network_image: ^3.0.0
-  flutter_cache_manager: ^3.0.2
+  shared_preferences: ^2.2.0
+  cached_network_image: ^3.2.3
+  flutter_cache_manager: ^3.3.1
 
   # 加密安全 SHA
-  crypto: ^3.0.1
+  crypto: ^3.0.3
 
   # webView
-  webview_flutter: ^2.0.4
-
-  # loading
-  loading_animations: ^2.2.0
+  webview_flutter: ^4.2.2
 
   # share
-  share: ^2.0.1
+  share_plus: ^7.1.0
 
   # 设备信息
-  device_info: ^2.0.0
+  device_info_plus: ^8.0.3
 
   # 包信息
-  package_info: ^2.0.0
+  package_info_plus: ^4.1.0
 
   # 路径查询
-  path_provider: ^2.0.1
+  path_provider: ^2.0.15
 
   # permission 权限
-  permission_handler: ^7.1.0
+  permission_handler: ^10.4.3
 
   # 错误收集
-  sentry: ^5.0.0
+  sentry: ^7.9.0
 
   # 通过 scheme 打开APP 获取 参数
-  uni_links: ^0.5.1
+#  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:

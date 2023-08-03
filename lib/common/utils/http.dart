@@ -33,10 +33,10 @@ class HttpUtil {
 
       // baseUrl: storage.read(key: STORAGE_KEY_APIURL) ?? SERVICE_API_BASEURL,
       //连接服务器超时时间，单位是毫秒.
-      connectTimeout: 10000,
+      connectTimeout: Duration(milliseconds: 10000),
 
       // 响应流上前后两次接受到数据的间隔，单位为毫秒。
-      receiveTimeout: 5000,
+      receiveTimeout: Duration(milliseconds: 5000),
 
       // Http请求头.
       headers: {},
@@ -114,19 +114,19 @@ class HttpUtil {
   }
 
   // 错误信息
-  ErrorEntity createErrorEntity(DioError error) {
+  ErrorEntity createErrorEntity(DioException error) {
     switch (error.type) {
-      case DioErrorType.cancel:
-        return ErrorEntity(code: -1, message: "请求取消");
-      case DioErrorType.connectTimeout:
+      case DioExceptionType.connectionTimeout:
         return ErrorEntity(code: -1, message: "连接超时");
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.sendTimeout:
         return ErrorEntity(code: -1, message: "请求超时");
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.receiveTimeout:
         return ErrorEntity(code: -1, message: "响应超时");
-      case DioErrorType.cancel:
+      case DioExceptionType.cancel:
         return ErrorEntity(code: -1, message: "请求取消");
-      case DioErrorType.response:
+      case DioExceptionType.connectionError:
+        return ErrorEntity(code: -1, message: "连接错误");
+      case DioExceptionType.badResponse:
         {
           try {
             int errCode =
@@ -169,7 +169,7 @@ class HttpUtil {
         }
       default:
         {
-          return ErrorEntity(code: -1, message: error.message);
+          return ErrorEntity(code: -1, message: error.message ?? '未知错误');
         }
     }
   }
