@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
+import 'package:flutter_ducafecat_news_getx/pages/book/view.dart';
 import 'package:flutter_ducafecat_news_getx/pages/category/index.dart';
 import 'package:flutter_ducafecat_news_getx/pages/main/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +14,7 @@ class ApplicationPage extends GetView<ApplicationController> {
   AppBar _buildAppBar() {
     return transparentAppBar(
         title: Obx(() => Text(
-              controller.tabTitles[controller.state.page],
+              controller.tabTitles[controller.state.page]['title'],
               style: TextStyle(
                 color: AppColors.primaryText,
                 fontFamily: 'Montserrat',
@@ -39,7 +40,7 @@ class ApplicationPage extends GetView<ApplicationController> {
       children: <Widget>[
         MainPage(),
         CategoryPage(),
-        Text('BookmarksPage'),
+        BookPage(),
         Text('AccountPage'),
       ],
       controller: controller.pageController,
@@ -52,18 +53,18 @@ class ApplicationPage extends GetView<ApplicationController> {
     return Obx(() => BottomNavigationBar(
           items: controller.bottomTabs,
           currentIndex: controller.state.page,
-          // fixedColor: AppColors.primaryElement,
+          fixedColor: AppColors.primaryElement,
           type: BottomNavigationBarType.fixed,
           onTap: controller.handleNavBarTap,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          // showSelectedLabels: false,
+          // showUnselectedLabels: false,
         ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      // appBar: _buildAppBar(),
       body: _buildPageView(),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );

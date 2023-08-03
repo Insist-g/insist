@@ -59,7 +59,7 @@ class NewsChannelsWidget extends GetView<MainController> {
                                     top: 10.w,
                                     right: 10.w,
                                     child: Image.asset(
-                                      "assets/images/channel-${item.code}.png",
+                                      "assets/images/android_sutdio.png",
                                       fit: BoxFit.cover,
                                     ),
                                   ),

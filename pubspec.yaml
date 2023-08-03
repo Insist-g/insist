@@ -82,6 +82,9 @@ dependencies:
   # 错误收集
   sentry: ^7.9.0
 
+  #banner
+  carousel_slider: ^4.2.1
+
   # 通过 scheme 打开APP 获取 参数
 #  uni_links: ^0.5.1
 

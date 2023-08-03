@@ -1,9 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:get/get.dart';
@@ -21,7 +18,7 @@ class ApplicationController extends GetxController {
   /// 成员变量
 
   // tab 页标题
-  late final List<String> tabTitles;
+  late final List tabTitles;
 
   // 页控制器
   late final PageController pageController;
@@ -42,9 +39,9 @@ class ApplicationController extends GetxController {
     state.page = page;
   }
 
-  /// scheme 内部打开
-  bool isInitialUriIsHandled = false;
-  StreamSubscription? uriSub;
+  // / scheme 内部打开
+  // bool isInitialUriIsHandled = false;
+  // StreamSubscription? uriSub;
 
   // // 第一次打开
   // Future<void> handleInitialUri() async {
@@ -88,63 +85,31 @@ class ApplicationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     // handleInitialUri();
     // handleIncomingLinks();
-
     // 准备一些静态数据
-    tabTitles = ['Welcome', 'Cagegory', 'Bookmarks', 'Account'];
-    bottomTabs = <BottomNavigationBarItem>[
-      new BottomNavigationBarItem(
-        icon: Icon(
-          Iconfont.home,
-          color: AppColors.tabBarElement,
-        ),
-        activeIcon: Icon(
-          Iconfont.home,
-          color: AppColors.secondaryElementText,
-        ),
-        label: 'main',
-        backgroundColor: AppColors.primaryBackground,
-      ),
-      new BottomNavigationBarItem(
-        icon: Icon(
-          Iconfont.grid,
-          color: AppColors.tabBarElement,
-        ),
-        activeIcon: Icon(
-          Iconfont.grid,
-          color: AppColors.secondaryElementText,
-        ),
-        label: 'category',
-        backgroundColor: AppColors.primaryBackground,
-      ),
-      new BottomNavigationBarItem(
-        icon: Icon(
-          Iconfont.tag,
-          color: AppColors.tabBarElement,
-        ),
-        activeIcon: Icon(
-          Iconfont.tag,
-          color: AppColors.secondaryElementText,
-        ),
-        label: 'tag',
-        backgroundColor: AppColors.primaryBackground,
-      ),
-      new BottomNavigationBarItem(
-        icon: Icon(
-          Iconfont.me,
-          color: AppColors.tabBarElement,
-        ),
-        activeIcon: Icon(
-          Iconfont.me,
-          color: AppColors.secondaryElementText,
-        ),
-        label: 'my',
-        backgroundColor: AppColors.primaryBackground,
-      ),
+    tabTitles = [
+      {'title': 'Welcome', 'icon': Iconfont.home},
+      {'title': 'Cagegory', 'icon': Iconfont.grid},
+      {'title': 'Bookmarks', 'icon': Iconfont.tag},
+      {'title': 'Account', 'icon': Iconfont.me}
     ];
-    pageController = new PageController(initialPage: state.page);
+
+    bottomTabs = tabTitles
+        .map((e) => BottomNavigationBarItem(
+              icon: Icon(
+                e['icon'],
+                color: AppColors.tabBarElement,
+              ),
+              activeIcon: Icon(
+                e['icon'],
+                color: AppColors.secondaryElementText,
+              ),
+              label: e['title'],
+              backgroundColor: AppColors.primaryBackground,
+            ))
+        .toList();
+    pageController = PageController(initialPage: state.page);
   }
 
   @override
@@ -159,7 +124,7 @@ class ApplicationController extends GetxController {
 
   @override
   void dispose() {
-    uriSub?.cancel();
+    // uriSub?.cancel();
     pageController.dispose();
     super.dispose();
   }
