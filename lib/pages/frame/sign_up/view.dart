@@ -3,7 +3,7 @@ import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/bg_paint.dart';
+import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/back_ground.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +20,7 @@ class SignUpPage extends GetView<SignUpController> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: CustomPaint(
-        painter: BgPainter(),
+        painter: SignUpBg(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -52,7 +52,7 @@ class SignUpPage extends GetView<SignUpController> {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 2, horizontal: 20),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 EditText(
                     labelText: "User Account",
                     controller: controller.accountC,
@@ -62,7 +62,7 @@ class SignUpPage extends GetView<SignUpController> {
                         fontWeight: FontWeight.w800),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 2, horizontal: 20)),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 EditText(
                     labelText: "Pass Word",
                     controller: controller.passC,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/bg_paint.dart';
+import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/back_ground.dart';
 import 'package:flutter_ducafecat_news_getx/pages/frame/verify_code/widget/timer.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
@@ -21,7 +21,7 @@ class VerifyCodePage extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
               child: CustomPaint(
-                painter: BgPainter(),
+                painter: SignUpBg(),
               ),
             ),
             Column(

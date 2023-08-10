@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
+import 'package:flutter_ducafecat_news_getx/pages/frame/sign_in/widget/back_ground.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -10,49 +12,21 @@ class SignInPage extends GetView<SignInController> {
   // logo
   Widget _buildLogo() {
     return Container(
-      width: 110.w,
-      margin: EdgeInsets.only(top: (40 + 44.0).h), // 顶部系统栏 44px
+      margin: EdgeInsets.only(top: 60),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: 76.w,
-            width: 76.w,
-            margin: EdgeInsets.symmetric(horizontal: 15.w),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    height: 76.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryBackground,
-                      boxShadow: [
-                        Shadows.primaryShadow,
-                      ],
-                      borderRadius: BorderRadius.all(
-                          Radius.circular((76 * 0.5).w)), // 父容器的50%
-                    ),
-                    child: Container(),
-                  ),
-                ),
-                Positioned(
-                  top: 13.w,
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.none,
-                  ),
-                ),
-              ],
+            width: Get.width / 3,
+            height: Get.width / 3,
+            child: Image(
+              image: AssetImage("assets/images/logo.png"),
+              fit: BoxFit.fill,
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 15.h),
             child: Text(
-              "SECTOR",
+              "INSIST",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.primaryText,
@@ -64,7 +38,7 @@ class SignInPage extends GetView<SignInController> {
             ),
           ),
           Text(
-            "news",
+            "new",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.primaryText,
@@ -218,15 +192,20 @@ class SignInPage extends GetView<SignInController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            _buildLogo(),
-            _buildInputForm(),
-            Spacer(),
-            _buildThirdPartyLogin(),
-            _buildSignupButton(),
-          ],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: CustomPaint(
+          painter: SignInBg(),
+          child: Column(
+            children: <Widget>[
+              _buildLogo(),
+              _buildInputForm(),
+              Spacer(),
+              _buildThirdPartyLogin(),
+              _buildSignupButton(),
+            ],
+          ),
         ),
       ),
     );

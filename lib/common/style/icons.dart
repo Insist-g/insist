@@ -7,4 +7,5 @@ class AlIcon {
   static const IconData xy = IconData(0xe600, fontFamily: _family);
   static const IconData pxx = IconData(0xe602, fontFamily: _family);
   static const IconData kg = IconData(0xe601, fontFamily: _family);
+  static const IconData logo = IconData(0xe661, fontFamily: _family);
 }

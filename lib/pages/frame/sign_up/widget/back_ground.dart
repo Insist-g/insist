@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BgPainter extends CustomPainter {
+class SignUpBg extends CustomPainter {
   final _path = Path();
   final _paint = Paint()
     ..strokeWidth = 4
