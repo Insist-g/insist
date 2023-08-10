@@ -85,6 +85,8 @@ dependencies:
   #banner
   carousel_slider: ^4.2.1
 
+  logger: ^2.0.1
+
   # 通过 scheme 打开APP 获取 参数
 #  uni_links: ^0.5.1
 
@@ -132,6 +134,9 @@ flutter:
     - assets/images/
 
   fonts:
+    - family: alIcons
+      fonts:
+        - asset: assets/icons/iconfont.ttf
     - family: Avenir
       fonts:
         - asset: assets/fonts/Avenir-Book.ttf
@@ -145,3 +150,4 @@ flutter:
     - family: Iconfont
       fonts:
         - asset: assets/fonts/iconfont.ttf
+

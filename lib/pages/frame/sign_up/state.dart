@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
 
 class SignUpState {
-  /// 响应变量用 get set 包下
+  final _enable = false.obs;
 
-  final _obj = ''.obs;
-  set obj(value) => this._obj.value = value;
-  get obj => this._obj.value;
+  set enable(value) => this._enable.value = value;
 
-  // SignUpState() {}
+  get enable => this._enable.value;
 }

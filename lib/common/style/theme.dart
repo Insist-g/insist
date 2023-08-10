@@ -8,7 +8,7 @@ class AppTheme {
 
   static ThemeData light = ThemeData(
     brightness: Brightness.light,
-    scaffoldBackgroundColor: AppColor.scaffoldBackground,
+    scaffoldBackgroundColor: AppColor.white,
     splashColor: Colors.transparent,
     highlightColor: Colors.transparent,
     primaryColor: AppColor.accentColor,
@@ -34,7 +34,7 @@ class AppTheme {
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColor.scaffoldBackground,
+      backgroundColor: AppColor.white ,
       unselectedLabelStyle: TextStyle(fontSize: 12),
       selectedLabelStyle: TextStyle(fontSize: 12),
       unselectedItemColor: Color(0xffA2A5B9),

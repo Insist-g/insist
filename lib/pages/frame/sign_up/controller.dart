@@ -6,66 +6,25 @@ import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:get/get.dart';
 
 import 'index.dart';
+import 'widget/progress_button.dart';
 
 class SignUpController extends GetxController {
-  SignUpController();
-
-  /// obs 响应式变量 才写入 state
   final state = SignUpState();
+  bool agreement = false;
 
-  /// 业务变量
+  final TextEditingController userNameC = TextEditingController();
+  final TextEditingController accountC = TextEditingController();
+  final TextEditingController passC = TextEditingController();
+  final ButtonProController buttonC = ButtonProController();
 
-  final TextEditingController fullnameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
-
-  /// 业务事件
-
-  // 返回上一页
-  handleNavPop() {
-    Get.back();
+  @override
+  void onInit() {
+    super.onInit();
+    userNameC.addListener(_verify);
+    accountC.addListener(_verify);
+    passC.addListener(_verify);
   }
 
-  // 提示信息
-  handleTip() {
-    toastInfo(msg: '这是注册界面');
-  }
-
-  // 忘记密码
-  handleFogotPassword() {
-    toastInfo(msg: '忘记密码');
-  }
-
-  // 执行注册操作
-  handleSignUp() async {
-    // if (!duCheckStringLength(fullnameController.value.text, 5)) {
-    //   toastInfo(msg: '用户名不能小于5位');
-    //   return;
-    // }
-    // if (!duIsEmail(emailController.value.text)) {
-    //   toastInfo(msg: '请正确输入邮件');
-    //   return;
-    // }
-    // if (!duCheckStringLength(passController.value.text, 6)) {
-    //   toastInfo(msg: '密码不能小于6位');
-    //   return;
-    // }
-
-    UserRegisterRequestEntity params = UserRegisterRequestEntity(
-      email: emailController.value.text,
-      password: duSHA256(passController.value.text),
-    );
-
-    await UserAPI.register(
-      params: params,
-    );
-
-    Get.back();
-  }
-
-  /// 生命周期
-
-  // 页面载入完成
   @override
   void onReady() {
     super.onReady();
@@ -73,9 +32,30 @@ class SignUpController extends GetxController {
 
   @override
   void dispose() {
-    fullnameController.dispose();
-    emailController.dispose();
-    passController.dispose();
+    userNameC.dispose();
+    accountC.dispose();
+    passC.dispose();
     super.dispose();
+  }
+
+  Future<bool?> handleSignUp() async {
+    buttonC.start();
+    if (!agreement) {
+      Get.snackbar("提示", "您请阅读并同意用户隐私协议～");
+    } else {
+      await Future.delayed(Duration(milliseconds: 10000));
+    }
+    return false;
+  }
+
+  void _verify() {
+    String userName = userNameC.text;
+    String passWord = passC.text;
+    String account = accountC.text;
+    if (userName.isEmpty || passWord.isEmpty || account.isEmpty) {
+      if (state.enable) state.enable = false;
+    } else {
+      if (!state.enable) state.enable = true;
+    }
   }
 }
