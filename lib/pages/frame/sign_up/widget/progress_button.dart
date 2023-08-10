@@ -5,23 +5,25 @@ class ButtonPro extends StatefulWidget {
   final bool enabled;
   final double width;
   final double height;
-  final String text;
   final Color color;
   final Color disableColor;
   final int milliseconds;
   final Function? onClick;
   final ButtonProController? controller;
+  final Widget child;
 
   ButtonPro({
     this.enabled = false,
     this.width = 500,
     this.height = 40,
-    this.text = "Hello",
     this.milliseconds = 1000,
     this.color = Colors.deepPurpleAccent,
     this.disableColor = Colors.grey,
     this.onClick,
     this.controller,
+    this.child = const Text('hello',
+        style: TextStyle(
+            fontSize: 16, color: AppColor.white, fontWeight: FontWeight.w500)),
   });
 
   @override
@@ -69,11 +71,7 @@ class _ButtonProState extends State<ButtonPro>
                 child: const CircularProgressIndicator(
                     backgroundColor: Colors.black12, color: AppColor.white),
               )
-            : Text(widget.text,
-                style: TextStyle(
-                    fontSize: 16,
-                    color: AppColor.white,
-                    fontWeight: FontWeight.w500)),
+            : widget.child,
       ),
       onTap: widget.enabled ? () => pressed() : null,
     );
@@ -93,7 +91,6 @@ class _ButtonProState extends State<ButtonPro>
         : setState(() =>
             state ? widget.controller?.start() : widget.controller?.stop());
   }
-
 }
 
 typedef ButtonProListener = void Function(bool isOpen);
@@ -125,5 +122,4 @@ class ButtonProController {
   void removeListener() {
     _buttonProListener = null;
   }
-
 }

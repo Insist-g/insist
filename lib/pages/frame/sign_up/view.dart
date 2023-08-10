@@ -12,6 +12,7 @@ import 'widget/check_box.dart';
 import 'widget/edit_widget.dart';
 import 'widget/progress_button.dart';
 
+/// 注册页
 class SignUpPage extends GetView<SignUpController> {
   @override
   Widget build(BuildContext context) {
@@ -89,10 +90,14 @@ class SignUpPage extends GetView<SignUpController> {
               ],
             ),
             Obx(() => ButtonPro(
-                  text: "SING UP",
                   enabled: controller.state.enable,
                   controller: controller.buttonC,
                   onClick: () => controller.handleSignUp(),
+                  child: Text('SING UP',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: AppColor.white,
+                          fontWeight: FontWeight.w500)),
                 )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

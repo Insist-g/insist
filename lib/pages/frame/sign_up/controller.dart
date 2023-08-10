@@ -3,6 +3,8 @@ import 'package:flutter_ducafecat_news_getx/common/apis/apis.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/entities.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
+import 'package:flutter_ducafecat_news_getx/pages/frame/verify_code/view.dart';
+import 'package:flutter_ducafecat_news_getx/pages/test/pinput.dart';
 import 'package:get/get.dart';
 
 import 'index.dart';
@@ -41,9 +43,13 @@ class SignUpController extends GetxController {
   Future<bool?> handleSignUp() async {
     buttonC.start();
     if (!agreement) {
-      Get.snackbar("提示", "您请阅读并同意用户隐私协议～");
+      await Future.delayed(Duration(milliseconds: 1000), () {
+        Get.snackbar(
+            "Tip:", "You must read and agree to the User Privacy Agreement.");
+      });
     } else {
-      await Future.delayed(Duration(milliseconds: 10000));
+      await Future.delayed(Duration(milliseconds: 3000));
+      Get.to(VerifyCodePage(), arguments: {'account': '18888888888'});
     }
     return false;
   }
