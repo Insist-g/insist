@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/selecter.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_in/widget/back_ground.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -56,52 +58,83 @@ class SignInPage extends GetView<SignInController> {
   // 登录表单
   Widget _buildInputForm() {
     return Container(
-      width: 295.w,
-      // height: 204,
       margin: EdgeInsets.only(top: 49.h),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
-          // email input
-          inputTextEdit(
-            controller: controller.emailController,
-            keyboardType: TextInputType.emailAddress,
-            hintText: "Email",
-            marginTop: 0,
-            // autofocus: true,
+          EditText(
+            labelText: "Account",
+            controller: controller.accountController,
+            textStyle: TextStyle(
+                fontSize: 18,
+                color: AppColor.mainColor,
+                fontWeight: FontWeight.w800),
+            contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
           ),
-          // password input
-          inputTextEdit(
+          const SizedBox(height: 10),
+          EditText(
+            labelText: "Password",
             controller: controller.passController,
-            keyboardType: TextInputType.visiblePassword,
-            hintText: "Password",
-            isPassword: true,
+            isInputPwd: true,
+            textStyle: TextStyle(
+                fontSize: 18,
+                color: AppColor.mainColor,
+                fontWeight: FontWeight.w800),
+            contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
           ),
-
-          // 注册、登录 横向布局
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CheckView(
+                value: controller.agreement,
+                onValueChange: (value) => controller.agreement = value,
+              ),
+              Text(
+                "I have read to the User Privacy Agreement",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: AppColor.secondaryText, fontSize: 12),
+              ),
+            ],
+          ),
+          const SizedBox(height: 60),
+          Obx(() => ButtonPro(
+                text: 'sign in',
+                height: 50,
+                firstRadius: 20,
+                lastRadius: 20,
+                enabled: controller.state.enable,
+                controller: controller.buttonProController,
+                onClick: () => controller.handleSignIn(),
+              )),
+          const SizedBox(height: 20),
           Container(
-            height: 44.h,
-            margin: EdgeInsets.only(top: 15.h),
-            child: Row(
-              children: [
-                // 注册
-                btnFlatButtonWidget(
-                  onPressed: controller.handleNavSignUp,
-                  gbColor: AppColors.thirdElement,
-                  title: "Sign up",
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              height: 50,
+              child: OutlinedButton(
+                child: Text(
+                  'sign up',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Montserrat',
+                      color: AppColor.primaryText,
+                      fontWeight: FontWeight.w500),
                 ),
-                Spacer(),
-                // 登录
-                btnFlatButtonWidget(
-                  onPressed: controller.handleSignIn,
-                  gbColor: AppColors.primaryElement,
-                  title: "Sign in",
+                style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory, // 没有水波纹效果
+                  overlayColor:
+                      MaterialStateProperty.all(const Color(0x59FFFFFF)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          ),
-          // Spacer(),
-
-          // Fogot password
+                onPressed: () {
+                  controller.handleNavSignUp();
+                },
+              )),
           Padding(
             padding: EdgeInsets.only(top: 8.0),
             child: TextButton(
@@ -126,86 +159,52 @@ class SignInPage extends GetView<SignInController> {
 
   // 第三方登录
   Widget _buildThirdPartyLogin() {
-    return Container(
-      width: 295.w,
-      margin: EdgeInsets.only(bottom: 40.h),
-      child: Column(
-        children: <Widget>[
-          // title
-          Text(
-            "Or sign in with social networks",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.primaryText,
-              fontFamily: "Avenir",
-              fontWeight: FontWeight.w400,
-              fontSize: 16.sp,
-            ),
-          ),
-          // 按钮
-          Padding(
-            padding: EdgeInsets.only(top: 20.h),
-            child: Row(
-              children: <Widget>[
-                btnFlatButtonBorderOnlyWidget(
-                  onPressed: () {},
-                  width: 88,
-                  iconFileName: "twitter",
-                ),
-                Spacer(),
-                btnFlatButtonBorderOnlyWidget(
-                  onPressed: () {},
-                  width: 88,
-                  iconFileName: "google",
-                ),
-                Spacer(),
-                btnFlatButtonBorderOnlyWidget(
-                  onPressed: () {},
-                  width: 88,
-                  iconFileName: "facebook",
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 注册按钮
-  Widget _buildSignupButton() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.h),
-      child: btnFlatButtonWidget(
-        onPressed: controller.handleNavSignUp,
-        width: 294,
-        gbColor: AppColors.secondaryElement,
-        fontColor: AppColors.primaryText,
-        title: "Sign up",
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Icon(AlIcon.kg, size: 40),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(AlIcon.pxx, size: 40),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(AlIcon.xy, size: 40),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: CustomPaint(
-          painter: SignInBg(),
-          child: Column(
-            children: <Widget>[
-              _buildLogo(),
-              _buildInputForm(),
-              Spacer(),
-              _buildThirdPartyLogin(),
-              _buildSignupButton(),
-            ],
-          ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              width: Get.width,
+              height: Get.height,
+              child: CustomPaint(
+                painter: FirstPainter(),
+              ),
+            ),
+            // Content in the middle of the background
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildLogo(),
+                  _buildInputForm(),
+                  _buildThirdPartyLogin(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:flutter_ducafecat_news_getx/pages/book/view.dart';
@@ -41,7 +42,11 @@ class ApplicationPage extends GetView<ApplicationController> {
         MainPage(),
         CategoryPage(),
         BookPage(),
-        Text('AccountPage'),
+        TextButton(
+            child: Text('log out'),
+            onPressed: () {
+              Get.offAllNamed(AppRoutes.SIGN_IN);
+            })
       ],
       controller: controller.pageController,
       onPageChanged: controller.handlePageChanged,

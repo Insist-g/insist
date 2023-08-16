@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:get/get.dart';
 
 class BookLogic extends GetxController with GetSingleTickerProviderStateMixin {
@@ -12,11 +13,12 @@ class BookLogic extends GetxController with GetSingleTickerProviderStateMixin {
     'https://youimg1.c-ctrip.com/target/fd/tg/g6/M09/56/7C/CggYs1buvJWAFrKCABSjuvR0CM0128.jpg',
   ];
 
+  final menuList = UnitIcon.getUnitIcons();
 
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
 
   @override

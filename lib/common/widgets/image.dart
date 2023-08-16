@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// 缓存图片
 Widget netImageCached(
   String url, {
   double width = 48,
   double height = 48,
+  double radius = 6,
   EdgeInsetsGeometry? margin,
 }) {
   return CachedNetworkImage(
@@ -17,7 +19,7 @@ Widget netImageCached(
       width: width.w,
       margin: margin,
       decoration: BoxDecoration(
-        borderRadius: Radii.k6pxRadius,
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
         image: DecorationImage(
           image: imageProvider,
           fit: BoxFit.cover,
@@ -28,7 +30,7 @@ Widget netImageCached(
     placeholder: (context, url) {
       return Container(
         alignment: Alignment.center,
-        child: CircularProgressIndicator(),
+        child: SpinKitFadingCube(size: 30, color: AppColor.mainColor),
       );
     },
     errorWidget: (context, url, error) => Icon(Icons.error),

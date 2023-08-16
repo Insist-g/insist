@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
-import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/selecter.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/back_ground.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'index.dart';
-import 'widget/check_box.dart';
-import 'widget/edit_widget.dart';
-import 'widget/progress_button.dart';
 
 /// 注册页
 class SignUpPage extends GetView<SignUpController> {
   @override
   Widget build(BuildContext context) {
-    // Get.put(SignUpController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: CustomPaint(
-        painter: SignUpBg(),
+        painter: SecondPainter(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -93,11 +87,7 @@ class SignUpPage extends GetView<SignUpController> {
                   enabled: controller.state.enable,
                   controller: controller.buttonC,
                   onClick: () => controller.handleSignUp(),
-                  child: Text('SING UP',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: AppColor.white,
-                          fontWeight: FontWeight.w500)),
+                  text: 'SING UP',
                 )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

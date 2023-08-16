@@ -5,66 +5,76 @@ import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/store/store.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-
 import 'index.dart';
 
 class SignInController extends GetxController {
   final state = SignInState();
+  bool agreement = false;
 
   SignInController();
 
-  // email的控制器
-  final TextEditingController emailController = TextEditingController();
-  // 密码的控制器
+  final TextEditingController accountController = TextEditingController();
   final TextEditingController passController = TextEditingController();
-
-  // final MyRepository repository;
-  // SignInController({@required this.repository}) : assert(repository != null);
-
-  // 跳转 注册界面
-  handleNavSignUp() {
-    Get.toNamed(AppRoutes.SIGN_UP);
-  }
-
-  // 忘记密码
-  handleFogotPassword() {
-    toastInfo(msg: '忘记密码');
-  }
-
-  // 执行登录操作
-  handleSignIn() async {
-    // if (!duIsEmail(_emailController.value.text)) {
-    //   toastInfo(msg: '请正确输入邮件');
-    //   return;
-    // }
-    // if (!duCheckStringLength(_passController.value.text, 6)) {
-    //   toastInfo(msg: '密码不能小于6位');
-    //   return;
-    // }
-
-    UserLoginRequestEntity params = UserLoginRequestEntity(
-      email: emailController.value.text,
-      password: duSHA256(passController.value.text),
-    );
-
-    UserLoginResponseEntity userProfile = await UserAPI.login(
-      params: params,
-    );
-    UserStore.to.saveProfile(userProfile);
-
-    Get.offAndToNamed(AppRoutes.Application);
-  }
+  final ButtonProController buttonProController = ButtonProController();
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
+    super.onInit();
+    accountController.addListener(_verify);
+    passController.addListener(_verify);
   }
 
   @override
   void dispose() {
-    emailController.dispose();
+    accountController.dispose();
     passController.dispose();
+    buttonProController.dispose();
     super.dispose();
   }
+
+  handleNavSignUp() {
+    Get.toNamed(AppRoutes.SIGN_UP);
+  }
+
+  handleFogotPassword() {
+    toastInfo(msg: '忘记密码');
+  }
+
+  handleSignIn() async {
+    buttonProController.start();
+    if (!agreement) {
+      await Future.delayed(Duration(milliseconds: 1000), () {
+        Get.snackbar(
+            "Tip:", "You must read and agree to the User Privacy Agreement.");
+      });
+      return false;
+    }
+    UserLoginResponseEntity userProfile = await UserAPI.login(
+      params: UserLoginRequestEntity(
+        email: accountController.value.text,
+        password: duSHA256(passController.value.text),
+      ),
+    );
+    if (userProfile != null) {
+      UserStore.to.saveProfile(userProfile);
+      Get.offAndToNamed(AppRoutes.Application);
+    } else {
+      EasyLoading.showError("账号或密码有误");
+      Get.snackbar("Tip:", "account: admin , password: 123456");
+      return false;
+    }
+  }
+
+  void _verify() {
+    String userName = accountController.text;
+    String passWord = passController.text;
+    if (userName.isEmpty || passWord.isEmpty) {
+      if (state.enable) state.enable = false;
+    } else {
+      if (!state.enable) state.enable = true;
+    }
+  }
+
 }

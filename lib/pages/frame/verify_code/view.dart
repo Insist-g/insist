@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/back_ground.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/verify_code/widget/timer.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/timer.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'logic.dart';
@@ -14,17 +13,10 @@ class VerifyCodePage extends StatelessWidget {
     Get.put(VerifyCodeLogic());
     return GetBuilder<VerifyCodeLogic>(builder: (logic) {
       return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: CustomPaint(
-                painter: SignUpBg(),
-              ),
-            ),
-            Column(
+          resizeToAvoidBottomInset: false,
+          body: CustomPaint(
+            painter: SecondPainter(),
+            child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -108,10 +100,8 @@ class VerifyCodePage extends StatelessWidget {
                 ).paddingSymmetric(vertical: 10, horizontal: 20)),
                 SizedBox(height: Get.height / 6)
               ],
-            )
-          ],
-        ),
-      );
+            ),
+          ));
     });
   }
 }

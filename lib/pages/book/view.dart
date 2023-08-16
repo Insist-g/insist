@@ -1,43 +1,38 @@
-import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
-import 'package:flutter_ducafecat_news_getx/pages/paint/love.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/image.dart';
 import 'package:get/get.dart';
-
 import 'logic.dart';
 
 class BookPage extends GetView<BookLogic> {
   @override
   Widget build(BuildContext context) {
     Get.put(BookLogic());
-    return
-        // Scaffold(
-        // //下拉刷新
-        // body: RefreshIndicator(
-        //   //可滚动组件在滚动时会发送ScrollNotification类型的通知
-        //   notificationPredicate: (ScrollNotification notification) {
-        //     //该属性包含当前ViewPort及滚动位置等信息
-        //     ScrollMetrics scrollMetrics = notification.metrics;
-        //     if (scrollMetrics.minScrollExtent == 0) {
-        //       return true;
-        //     } else {
-        //       return false;
-        //     }
-        //   },
-        //   //下拉刷新回调方法
-        //   onRefresh: () async {
-        //     //模拟网络刷新 等待2秒
-        //     await Future.delayed(const Duration(milliseconds: 2000));
-        //     //返回值以结束刷新
-        //     return Future.value(true);
-        //   },
-        //   child:
-        buildNestedScrollView();
-    // ),
-    // );
+    return Scaffold(
+      //下拉刷新
+      body: RefreshIndicator(
+          //可滚动组件在滚动时会发送ScrollNotification类型的通知
+          notificationPredicate: (ScrollNotification notification) {
+            //该属性包含当前ViewPort及滚动位置等信息
+            ScrollMetrics scrollMetrics = notification.metrics;
+            if (scrollMetrics.minScrollExtent == 0) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          //下拉刷新回调方法
+          onRefresh: () async {
+            //模拟网络刷新 等待2秒
+            await Future.delayed(const Duration(milliseconds: 2000));
+            //返回值以结束刷新
+            return Future.value(true);
+          },
+          child: buildNestedScrollView()),
+    );
   }
 
   //NestedScrollView 的基本使用
@@ -49,7 +44,7 @@ class BookPage extends GetView<BookLogic> {
         return [buildSliverAppBar()];
       },
       //页面的主体内容
-      body: buidChildWidget(),
+      body: buildChildWidget(),
     );
   }
 
@@ -59,7 +54,7 @@ class BookPage extends GetView<BookLogic> {
       title: buildHeader(),
       //标题居中
       centerTitle: true,
-      backgroundColor: AppColor.pinkColor,
+      backgroundColor: AppColor.white,
       //当此值为true时 SliverAppBar 会固定在页面顶部
       //当此值为fase时 SliverAppBar 会随着滑动向上滑动
       pinned: true,
@@ -73,7 +68,7 @@ class BookPage extends GetView<BookLogic> {
       snap: false,
       elevation: 0.0,
       //展开的高度
-      expandedHeight: 380,
+      expandedHeight: 420,
       //AppBar下的内容区域
       flexibleSpace: FlexibleSpaceBar(
         //背景
@@ -90,7 +85,7 @@ class BookPage extends GetView<BookLogic> {
   //随之数据会重新加载, 控件会重新渲染 带来了极不好的用户体验.
   //由于TabBarView内部也是用的是PageView, 因此两者的解决方式相同
   //页面的主体内容
-  Widget buidChildWidget() {
+  Widget buildChildWidget() {
     return TabBarView(
       controller: controller.tabController,
       children: <Widget>[
@@ -103,6 +98,9 @@ class BookPage extends GetView<BookLogic> {
         Center(
           child: Text("3"),
         ),
+        Center(
+          child: Text("4"),
+        ),
       ],
     );
   }
@@ -111,20 +109,14 @@ class BookPage extends GetView<BookLogic> {
   buildHeader() {
     //透明组件
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
-          icon: Icon(Icons.abc, color: Colors.white),
-          onPressed: () {
-            Get.to(LovePage());
-          },
-        ),
         Expanded(
           child: Container(
             width: double.infinity,
             height: 38,
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.white),
+              color: AppColor.gray,
               borderRadius: BorderRadius.circular(30),
             ),
             child: Row(
@@ -138,7 +130,7 @@ class BookPage extends GetView<BookLogic> {
                   width: 4,
                 ),
                 Text(
-                  "搜索",
+                  "搜索关键词",
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -148,8 +140,8 @@ class BookPage extends GetView<BookLogic> {
           ),
         ),
         IconButton(
-          icon: Icon(Icons.add_alert_rounded),
-          color: Colors.white,
+          icon: Icon(WeatherIcon.getRandomIcon(),
+              size: 40, color: AppColor.mainColor),
           onPressed: () {},
         ),
       ],
@@ -175,38 +167,74 @@ class BookPage extends GetView<BookLogic> {
         //返回值以结束刷新
         return Future.value(true);
       },
-      child: Column(
-        children: [
-          Container(
-              height: 240,
-              child: CarouselSlider(
-                options: CarouselOptions().copyWith(
-                  height: double.infinity,
-                  viewportFraction: 1.0,
-                  autoPlay: true,
-                ),
-                items: controller.imgList.map((item) {
-                  return Container(
-                    child: Image.network(item, fit: BoxFit.fill),
-                  );
-                }).toList(),
-              )),
-          Container(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 120,
-                    color: Colors.blueGrey,
-                    child: Container(
-                      height: 100,
+      child: Container(
+        height: 400,
+        child: Stack(
+          children: [
+            Container(
+                height: 240,
+                child: CarouselSlider(
+                  options: CarouselOptions().copyWith(
+                    height: double.infinity,
+                    viewportFraction: 1.0,
+                    autoPlay: true,
+                  ),
+                  items: controller.imgList.map((item) {
+                    return Container(
+                      child: netImageCached(
+                        item,
+                        width: double.infinity,
+                        height: double.infinity,
+                        radius: 0,
+                      ),
+                    );
+                  }).toList(),
+                )),
+            Positioned(
+                top: 230,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  // padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: AppColor.gray,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  child: GridView.custom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        // 水平方向每行item数量
+                        crossAxisCount: 4,
+                        // 垂直方向item之间的间距
+                        mainAxisSpacing: 10.0,
+                        // 水平方向item之间的间距
+                        crossAxisSpacing: 20.0,
+                      ),
+                      childrenDelegate:
+                          SliverChildBuilderDelegate((context, index) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(controller.menuList[index], size: 40)
+                                .marginOnly(bottom: 5),
+                            Text(
+                              "$index 哈哈哈哈哈哈哈哈哈哈哈",
+                              maxLines: 1,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(fontSize: 12),
+                            )
+                          ],
+                        );
+                      }, childCount: controller.menuList.length)),
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -222,22 +250,44 @@ class BookPage extends GetView<BookLogic> {
       child: Container(
         alignment: Alignment.center,
         child: Container(
-          color: Colors.grey[200],
+          color: AppColor.white,
+          // color: Colors.grey[200],
           //随着向上滑动，TabBar的宽度逐渐增大
           //父布局Container约束为 center对齐
           //所以程现出来的是中间x轴放大的效果
           // width: MediaQuery.of(context).size.width,
           child: TabBar(
             controller: controller.tabController,
+            indicatorColor: AppColor.black,
+            indicatorWeight: 4,
+            indicator: UnderlineTabIndicator(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                color: AppColor.black, // 指示器颜色
+                width: 2.0, // 指示器厚度
+              ),
+            ),
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorPadding:
+                EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            labelColor: AppColor.black,
+            unselectedLabelColor: AppColor.secondaryText,
+            labelStyle: TextStyle(
+                fontSize: 16, color: AppColor.black, fontFamily: 'Avenir'),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 14, color: AppColor.secondaryText),
             tabs: <Widget>[
               Tab(
-                text: "标签一",
+                text: "最新",
               ),
               Tab(
-                text: "标签二",
+                text: "关注",
               ),
               Tab(
-                text: "标签三",
+                text: "推荐",
+              ),
+              Tab(
+                text: "围观",
               ),
             ],
           ),
@@ -247,6 +297,7 @@ class BookPage extends GetView<BookLogic> {
   }
 }
 
+///底部
 Widget _buildDraggableScrollableSheet() {
   return DraggableScrollableSheet(
     //注意 maxChildSize >= initialChildSize >= minChildSize
@@ -279,15 +330,12 @@ class InterestView extends StatefulWidget {
 }
 
 class _InterestViewState extends State<InterestView> {
-
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(() {
-
       Log().d(widget.scrollController.offset.toString(), tag: "offset");
       Log().d(widget.scrollController.position.toString(), tag: "position");
-
     });
   }
 

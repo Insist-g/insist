@@ -1,5 +1,4 @@
 import 'package:flutter_ducafecat_news_getx/common/routers/names.dart';
-import 'package:flutter_ducafecat_news_getx/pages/frame/sign_up/widget/progress_button.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 

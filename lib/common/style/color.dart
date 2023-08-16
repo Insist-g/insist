@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  /// 页面背景颜色
   static const Color white = Color(0xFFFFFFFF);
+
+  static const Color black = Color(0xFF000000);
+
+  static const Color gray = Color(0xFFF6F6F6);
 
   /// 主要背景颜色
   static const Color primaryBackground = Color(0xFF5C78FF);
