@@ -4,6 +4,7 @@ import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/image.dart';
+import 'package:flutter_ducafecat_news_getx/pages/book/recommended/view.dart';
 import 'package:get/get.dart';
 import 'logic.dart';
 
@@ -24,26 +25,20 @@ class BookPage extends GetView<BookLogic> {
               return false;
             }
           },
-          //下拉刷新回调方法
           onRefresh: () async {
-            //模拟网络刷新 等待2秒
             await Future.delayed(const Duration(milliseconds: 2000));
-            //返回值以结束刷新
             return Future.value(true);
           },
           child: buildNestedScrollView()),
     );
   }
 
-  //NestedScrollView 的基本使用
   Widget buildNestedScrollView() {
-    //滑动视图
     return NestedScrollView(
       //配置可折叠的头布局
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [buildSliverAppBar()];
       },
-      //页面的主体内容
       body: buildChildWidget(),
     );
   }
@@ -71,10 +66,7 @@ class BookPage extends GetView<BookLogic> {
       expandedHeight: 420,
       //AppBar下的内容区域
       flexibleSpace: FlexibleSpaceBar(
-        //背景
-        //配置的是一个widget也就是说在这里可以使用任意的
-        //Widget组合 在这里直接使用的是一个图片
-        background: buildFlexibleSpaceWidget(),
+        background: buildFlexibleSpaceWidget(), //背景
       ),
       bottom: buildFlexibleTooBarWidget(),
     );
@@ -89,9 +81,7 @@ class BookPage extends GetView<BookLogic> {
     return TabBarView(
       controller: controller.tabController,
       children: <Widget>[
-        Center(
-          child: Text("1"),
-        ),
+        RecommendedPage(),
         Center(
           child: Text("2"),
         ),
@@ -105,9 +95,7 @@ class BookPage extends GetView<BookLogic> {
     );
   }
 
-  //构建SliverAppBar的标题title
   buildHeader() {
-    //透明组件
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -149,92 +137,71 @@ class BookPage extends GetView<BookLogic> {
   }
 
   buildFlexibleSpaceWidget() {
-    return RefreshIndicator(
-      //可滚动组件在滚动时会发送ScrollNotification类型的通知
-      notificationPredicate: (ScrollNotification notification) {
-        //该属性包含当前ViewPort及滚动位置等信息
-        ScrollMetrics scrollMetrics = notification.metrics;
-        if (scrollMetrics.minScrollExtent == 0) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      //下拉刷新回调方法
-      onRefresh: () async {
-        //模拟网络刷新 等待2秒
-        await Future.delayed(const Duration(milliseconds: 2000));
-        //返回值以结束刷新
-        return Future.value(true);
-      },
-      child: Container(
-        height: 400,
-        child: Stack(
-          children: [
-            Container(
-                height: 240,
-                child: CarouselSlider(
-                  options: CarouselOptions().copyWith(
-                    height: double.infinity,
-                    viewportFraction: 1.0,
-                    autoPlay: true,
-                  ),
-                  items: controller.imgList.map((item) {
-                    return Container(
-                      child: netImageCached(
-                        item,
-                        width: double.infinity,
-                        height: double.infinity,
-                        radius: 0,
-                      ),
-                    );
-                  }).toList(),
-                )),
-            Positioned(
-                top: 230,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: AppColor.gray,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10),
+    return SizedBox(
+      height: 400,
+      child: Stack(
+        children: [
+          Container(
+              height: 240,
+              child: CarouselSlider(
+                options: CarouselOptions().copyWith(
+                  height: double.infinity,
+                  viewportFraction: 1.0,
+                  autoPlay: true,
+                ),
+                items: controller.imgList.map((item) {
+                  return Container(
+                    child: netImageCached(
+                      item,
+                      width: double.infinity,
+                      height: double.infinity,
+                      radius: 0,
                     ),
+                  );
+                }).toList(),
+              )),
+          Positioned(
+              top: 230,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                // padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: AppColor.gray,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(10),
                   ),
-                  child: GridView.custom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        // 水平方向每行item数量
-                        crossAxisCount: 4,
-                        // 垂直方向item之间的间距
-                        mainAxisSpacing: 10.0,
-                        // 水平方向item之间的间距
-                        crossAxisSpacing: 20.0,
-                      ),
-                      childrenDelegate:
-                          SliverChildBuilderDelegate((context, index) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(controller.menuList[index], size: 40)
-                                .marginOnly(bottom: 5),
-                            Text(
-                              "$index 哈哈哈哈哈哈哈哈哈哈哈",
-                              maxLines: 1,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(fontSize: 12),
-                            )
-                          ],
-                        );
-                      }, childCount: controller.menuList.length)),
-                )),
-          ],
-        ),
+                ),
+                child: GridView.custom(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      // 垂直方向item之间的间距
+                      mainAxisSpacing: 10.0,
+                      // 水平方向item之间的间距
+                      crossAxisSpacing: 20.0,
+                    ),
+                    childrenDelegate:
+                        SliverChildBuilderDelegate((context, index) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(controller.menuList[index], size: 40)
+                              .marginOnly(bottom: 5),
+                          Text(
+                            "$index 哈哈哈哈哈哈哈哈哈哈哈",
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                            style: TextStyle(fontSize: 12),
+                          )
+                        ],
+                      );
+                    }, childCount: controller.menuList.length)),
+              )),
+        ],
       ),
     );
   }
@@ -244,53 +211,48 @@ class BookPage extends GetView<BookLogic> {
     //[PreferredSize]用于配置在AppBar或者是SliverAppBar
     //的bottom中 实现 PreferredSizeWidget
     return PreferredSize(
-      //定义大小
       preferredSize: Size.fromHeight(44),
-      //配置任意的子Widget
       child: Container(
+        color: AppColor.white,
         alignment: Alignment.center,
-        child: Container(
-          color: AppColor.white,
-          // color: Colors.grey[200],
-          //随着向上滑动，TabBar的宽度逐渐增大
-          //父布局Container约束为 center对齐
-          //所以程现出来的是中间x轴放大的效果
-          // width: MediaQuery.of(context).size.width,
-          child: TabBar(
-            controller: controller.tabController,
-            indicatorColor: AppColor.black,
-            indicatorWeight: 4,
-            indicator: UnderlineTabIndicator(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(
-                color: AppColor.black, // 指示器颜色
-                width: 2.0, // 指示器厚度
-              ),
+        // color: Colors.grey[200],
+        //随着向上滑动，TabBar的宽度逐渐增大
+        //父布局Container约束为 center对齐
+        //所以程现出来的是中间x轴放大的效果
+        // width: MediaQuery.of(context).size.width,
+        child: TabBar(
+          controller: controller.tabController,
+          indicatorColor: AppColor.black,
+          indicatorWeight: 4,
+          indicator: UnderlineTabIndicator(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(
+              color: AppColor.black, // 指示器颜色
+              width: 2.0, // 指示器厚度
             ),
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorPadding:
-                EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            labelColor: AppColor.black,
-            unselectedLabelColor: AppColor.secondaryText,
-            labelStyle: TextStyle(
-                fontSize: 16, color: AppColor.black, fontFamily: 'Avenir'),
-            unselectedLabelStyle:
-                TextStyle(fontSize: 14, color: AppColor.secondaryText),
-            tabs: <Widget>[
-              Tab(
-                text: "最新",
-              ),
-              Tab(
-                text: "关注",
-              ),
-              Tab(
-                text: "推荐",
-              ),
-              Tab(
-                text: "围观",
-              ),
-            ],
           ),
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          labelColor: AppColor.black,
+          unselectedLabelColor: AppColor.secondaryText,
+          labelStyle: TextStyle(
+              fontSize: 16, color: AppColor.black, fontFamily: 'Avenir'),
+          unselectedLabelStyle:
+              TextStyle(fontSize: 14, color: AppColor.secondaryText),
+          tabs: <Widget>[
+            Tab(
+              text: "最新",
+            ),
+            Tab(
+              text: "关注",
+            ),
+            Tab(
+              text: "推荐",
+            ),
+            Tab(
+              text: "围观",
+            ),
+          ],
         ),
       ),
     );

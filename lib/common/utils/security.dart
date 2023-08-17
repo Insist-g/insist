@@ -9,3 +9,23 @@ String duSHA256(String input) {
 
   return digest.toString();
 }
+
+int getStringLength(String? text) {
+  String punctuation = '.,!?;:"\'()[]{}<>，。！？；：“”‘’（）【】{}《》';
+  String cleanedText =
+      (text ?? "").replaceAll(RegExp('[$punctuation\\p{Script=Han}]'), '');
+  return cleanedText.length;
+}
+
+int countLengthWithoutPunctuation(String input) {
+  String punctuation = '.,!?;:"\'()[]{}<>，。！？；：“”‘’（）【】{}《》';
+  int count = 0;
+
+  for (int i = 0; i < input.length; i++) {
+    if (!punctuation.contains(input[i])) {
+      count++;
+    }
+  }
+
+  return count;
+}

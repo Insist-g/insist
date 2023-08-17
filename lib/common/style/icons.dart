@@ -22,7 +22,6 @@ class WeatherIcon {
   static const IconData weather6 = IconData(0xe61e, fontFamily: _family);
   static const IconData weather7 = IconData(0xe61f, fontFamily: _family);
   static const IconData weather8 = IconData(0xe620, fontFamily: _family);
-
   static const IconData weather9 = IconData(0xe621, fontFamily: _family);
   static const IconData weather10 = IconData(0xe622, fontFamily: _family);
   static const IconData weather11 = IconData(0xe623, fontFamily: _family);
