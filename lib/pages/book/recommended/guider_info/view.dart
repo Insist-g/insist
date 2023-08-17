@@ -42,7 +42,8 @@ class GuiderInfoPage extends GetView<GuiderInfoController> {
                     Text(date?.str ?? ""),
                     if (date?.image != null && (date?.image ?? "").isNotEmpty)
                       netImageCached(date!.image!,
-                          width: Get.width, height: Get.width / 2)
+                              width: Get.width, height: Get.width / 2)
+                          .marginSymmetric(vertical: 10)
                     else
                       SizedBox(
                         height: 5,

@@ -168,7 +168,7 @@ class BookPage extends GetView<BookLogic> {
               child: Container(
                 // padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: AppColor.gray,
+                  color: AppColor.white,
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(10),
                   ),

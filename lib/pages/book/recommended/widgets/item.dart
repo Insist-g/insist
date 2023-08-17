@@ -13,7 +13,7 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 10),
         child: (date?.image?.length ?? 0) > 1 ? _item2() : _item1(),
       ),
       onTap: () {
