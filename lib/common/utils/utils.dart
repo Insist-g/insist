@@ -17,10 +17,11 @@ class Utils {
   ///查看大图
   ///image 图片列表
   ///index 需要查看图片的下表
-  static showViewBigPhoto({required List images, required index}) {
+  static showViewBigPhoto(
+      {required List images, required index, required heroTag}) {
     Get.to(PhotoViewGalleryScreen(
       images: images,
-      heroTag: 'photo',
+      heroTag: heroTag,
       index: index,
     ));
   }

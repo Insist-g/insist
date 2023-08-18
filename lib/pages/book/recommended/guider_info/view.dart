@@ -60,13 +60,14 @@ class GuiderInfoPage extends GetView<GuiderInfoController> {
                                   .marginSymmetric(vertical: 10)
                               : Image.asset(date.image!,
                                   width: Get.width, height: Get.width / 2),
-                          tag: 'photo',
+                          tag: index.toString(),
                         ),
                         onTap: () {
                           final int _index =
                               imageList?.indexOf(date.image ?? "") ?? -1;
                           Utils.showViewBigPhoto(
                               images: imageList ?? [],
+                              heroTag: index.toString(),
                               index: _index == -1 ? 0 : _index);
                         },
                       )
