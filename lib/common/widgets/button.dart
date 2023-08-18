@@ -190,8 +190,10 @@ class _ButtonProState extends State<ButtonPro>
   }
 
   listener(value) {
+    if (!mounted) return;
     setState(() => _changSize = value);
     Future.delayed(Duration(milliseconds: widget.milliseconds - 100), () {
+      if (!mounted) return;
       setState(() => _showProgress = value);
     });
   }
@@ -199,12 +201,8 @@ class _ButtonProState extends State<ButtonPro>
   pressed() async {
     var state = await widget.onClick?.call();
     if (state == null) return;
-    widget.controller == null
-        ? listener(state)
-        : setState(() =>
-            state ? widget.controller?.start() : widget.controller?.stop());
+    listener(state);
   }
-
 }
 
 typedef ButtonProListener = void Function(bool isOpen);
@@ -214,6 +212,8 @@ class ButtonProController {
   ButtonProListener? _buttonProListener;
 
   get state => _loading;
+
+  get listener => _buttonProListener;
 
   setListener(ButtonProListener listener) {
     _buttonProListener = listener;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/selecter.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'index.dart';
 
 class SignInPage extends GetView<SignInController> {
@@ -105,7 +105,10 @@ class SignInPage extends GetView<SignInController> {
                 lastRadius: 20,
                 enabled: controller.state.enable,
                 controller: controller.buttonProController,
-                onClick: () => controller.handleSignIn(),
+                onClick: () async {
+                  Utils.hideKeyboard(Get.context!);
+                  return await controller.handleSignIn();
+                },
               )),
           const SizedBox(height: 20),
           Container(
@@ -181,31 +184,36 @@ class SignInPage extends GetView<SignInController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              width: Get.width,
-              height: Get.height,
-              child: CustomPaint(
-                painter: FirstPainter(),
+      body: GestureDetector(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                width: Get.width,
+                height: Get.height,
+                child: CustomPaint(
+                  painter: FirstPainter(),
+                ),
               ),
-            ),
-            // Content in the middle of the background
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildLogo(),
-                  _buildInputForm(),
-                  _buildThirdPartyLogin(),
-                ],
+              // Content in the middle of the background
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildLogo(),
+                    _buildInputForm(),
+                    _buildThirdPartyLogin(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        onTap: () {
+          Utils.hideKeyboard(context);
+        },
       ),
     );
   }

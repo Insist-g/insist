@@ -195,6 +195,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_pdfview:
+    dependency: "direct main"
+    description:
+      name: flutter_pdfview
+      sha256: d9735fd8991609910742a25c63a5f87060849e57e60112c677b802ddb64bed72
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.1"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -429,6 +437,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.3"
+  photo_manager:
+    dependency: "direct main"
+    description:
+      name: photo_manager
+      sha256: b2d81bd197323697d1b335e2e04cea2f67e11624ced77cfd02917a10afaeba73
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.7.1"
   photo_view:
     dependency: "direct main"
     description:

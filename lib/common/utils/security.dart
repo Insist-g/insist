@@ -20,12 +20,10 @@ int getStringLength(String? text) {
 int countLengthWithoutPunctuation(String input) {
   String punctuation = '.,!?;:"\'()[]{}<>，。！？；：“”‘’（）【】{}《》';
   int count = 0;
-
   for (int i = 0; i < input.length; i++) {
     if (!punctuation.contains(input[i])) {
       count++;
     }
   }
-
   return count;
 }

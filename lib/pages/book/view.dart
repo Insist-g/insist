@@ -4,7 +4,6 @@ import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/image.dart';
-import 'package:flutter_ducafecat_news_getx/pages/book/recommended/view.dart';
 import 'package:get/get.dart';
 import 'logic.dart';
 
@@ -13,7 +12,6 @@ class BookPage extends GetView<BookLogic> {
   Widget build(BuildContext context) {
     Get.put(BookLogic());
     return Scaffold(
-      //下拉刷新
       body: RefreshIndicator(
           //可滚动组件在滚动时会发送ScrollNotification类型的通知
           notificationPredicate: (ScrollNotification notification) {
@@ -80,18 +78,7 @@ class BookPage extends GetView<BookLogic> {
   Widget buildChildWidget() {
     return TabBarView(
       controller: controller.tabController,
-      children: <Widget>[
-        RecommendedPage(),
-        Center(
-          child: Text("2"),
-        ),
-        Center(
-          child: Text("3"),
-        ),
-        Center(
-          child: Text("4"),
-        ),
-      ],
+      children: controller.tabs.map((e) => e["view"] as Widget).toList(),
     );
   }
 
@@ -239,20 +226,11 @@ class BookPage extends GetView<BookLogic> {
               fontSize: 16, color: AppColor.black, fontFamily: 'Avenir'),
           unselectedLabelStyle:
               TextStyle(fontSize: 14, color: AppColor.secondaryText),
-          tabs: <Widget>[
-            Tab(
-              text: "最新",
-            ),
-            Tab(
-              text: "关注",
-            ),
-            Tab(
-              text: "推荐",
-            ),
-            Tab(
-              text: "围观",
-            ),
-          ],
+          tabs: controller.tabs
+              .map((e) => Tab(
+                    text: e["title"],
+                  ))
+              .toList(),
         ),
       ),
     );

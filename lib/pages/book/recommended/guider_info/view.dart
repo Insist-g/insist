@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/book.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/style.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/security.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:get/get.dart';
 import 'index.dart';
 
+//https://www.jianshu.com/p/b5292ef7c38c 吸顶效果
 class GuiderInfoPage extends GetView<GuiderInfoController> {
   final GuiderWord? guiderWord;
   const GuiderInfoPage(this.guiderWord, {Key? key}) : super(key: key);
@@ -22,15 +23,22 @@ class GuiderInfoPage extends GetView<GuiderInfoController> {
               itemCount: guiderWord?.content?.length,
               itemBuilder: (context, index) {
                 final date = guiderWord?.content?[index];
+                final List<String>? imageList = guiderWord?.content
+                    ?.where((item) => (item.image ?? "").isNotEmpty)
+                    .map((item) => item.image!)
+                    .toList();
                 return Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           date?.title ?? "",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
                             "${countLengthWithoutPunctuation(date?.str ?? "")}字",
@@ -39,11 +47,29 @@ class GuiderInfoPage extends GetView<GuiderInfoController> {
                       ],
                     ),
                     SizedBox(height: 5),
-                    Text(date?.str ?? ""),
-                    if (date?.image != null && (date?.image ?? "").isNotEmpty)
-                      netImageCached(date!.image!,
-                              width: Get.width, height: Get.width / 2)
-                          .marginSymmetric(vertical: 10)
+                    SelectableText(
+                      date?.str ?? "",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    if ((date?.image ?? "").isNotEmpty)
+                      InkWell(
+                        child: Hero(
+                          child: date!.image!.startsWith('http')
+                              ? netImageCached(date.image!,
+                                      width: Get.width, height: Get.width / 2)
+                                  .marginSymmetric(vertical: 10)
+                              : Image.asset(date.image!,
+                                  width: Get.width, height: Get.width / 2),
+                          tag: 'photo',
+                        ),
+                        onTap: () {
+                          final int _index =
+                              imageList?.indexOf(date.image ?? "") ?? -1;
+                          Utils.showViewBigPhoto(
+                              images: imageList ?? [],
+                              index: _index == -1 ? 0 : _index);
+                        },
+                      )
                     else
                       SizedBox(
                         height: 5,

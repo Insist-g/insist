@@ -76,5 +76,4 @@ class SignInController extends GetxController {
       if (!state.enable) state.enable = true;
     }
   }
-
 }

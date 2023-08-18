@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/book.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/style.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:flutter_ducafecat_news_getx/pages/book/recommended/guider_info/index.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,11 @@ class Item extends StatelessWidget {
         child: (date?.image?.length ?? 0) > 1 ? _item2() : _item1(),
       ),
       onTap: () {
-        Get.to(GuiderInfoPage(date));
+        if (date?.pdf != null) {
+          Utils.toPdfPage(path: date?.pdf ?? "", title: date?.name ?? "");
+        } else {
+          Get.to(GuiderInfoPage(date));
+        }
       },
     );
   }
