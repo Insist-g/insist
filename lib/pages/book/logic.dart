@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/iconfont.dart';
+import 'package:flutter_ducafecat_news_getx/pages/book/listener/index.dart';
 import 'package:get/get.dart';
 import 'recommended/view.dart';
 
@@ -13,7 +14,7 @@ class BookLogic extends GetxController with GetSingleTickerProviderStateMixin {
   ];
   final List<Map> tabs = [
     {"title": "最新", "view": RecommendedPage()},
-    {"title": "关注", "view": Container()},
+    {"title": "聆听", "view": ListenerPage()},
     {"title": "推荐", "view": Container()},
     {"title": "围观", "view": Container()},
   ];

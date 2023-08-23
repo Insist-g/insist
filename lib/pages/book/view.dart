@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
-import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/iconfont.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/image.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/keepalive.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:get/get.dart';
 import 'logic.dart';
 
@@ -78,7 +80,9 @@ class BookPage extends GetView<BookLogic> {
   Widget buildChildWidget() {
     return TabBarView(
       controller: controller.tabController,
-      children: controller.tabs.map((e) => e["view"] as Widget).toList(),
+      children: controller.tabs
+          .map((e) => KeepAliveWrapper(e["view"] as Widget))
+          .toList(),
     );
   }
 

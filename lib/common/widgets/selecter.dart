@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/iconfont.dart';
 
 class CheckView extends StatefulWidget {
   final Function(bool)? onValueChange;

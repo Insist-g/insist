@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:get/get.dart';
@@ -126,6 +125,7 @@ class ApplicationController extends GetxController {
   void dispose() {
     // uriSub?.cancel();
     pageController.dispose();
+    FlutterBugly.dispose();
     super.dispose();
   }
 }

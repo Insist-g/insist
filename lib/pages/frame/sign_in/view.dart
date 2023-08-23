@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
-import 'package:flutter_ducafecat_news_getx/common/style/icons.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/selecter.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/web.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -90,10 +90,17 @@ class SignInPage extends GetView<SignInController> {
                 value: controller.agreement,
                 onValueChange: (value) => controller.agreement = value,
               ),
-              Text(
-                "I have read to the User Privacy Agreement",
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: AppColor.secondaryText, fontSize: 12),
+              GestureDetector(
+                child: Text(
+                  "I have read to the User Privacy Agreement",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: AppColor.secondaryText, fontSize: 12),
+                ),
+                onTap: () => Get.to(WebPage(
+                  url: "www.baidu.com",
+                  jsParameter: "什么？我是参数吗？哈哈哈，没错！",
+                  title: "就这样的web",
+                )),
               ),
             ],
           ),

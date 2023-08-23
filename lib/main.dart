@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_ducafecat_news_getx/common/langs/translation_service.dart';
 import 'package:flutter_ducafecat_news_getx/common/routers/pages.dart';
 import 'package:flutter_ducafecat_news_getx/common/store/store.dart';
@@ -13,7 +14,16 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 Future<void> main() async {
   await Global.init();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  initialization(null);
   runApp(MyApp());
+}
+
+//启动图延时移除方法
+void initialization(BuildContext? context) async {
+  await Future.delayed(const Duration(seconds: 2));
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {

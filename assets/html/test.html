@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Web Page</title>
+</head>
+
+<body>
+  <h1>Received Parameter:</h1>
+  <p id="paramDisplay"></p>
+  <button id="callMethod1" onclick="callFlutterMethod('method1', 'Parameter for Method 1')">Call Method 1</button>
+  <button id="callMethod2" onclick="callFlutterMethod('method2', 'Parameter for Method 2')">Call Method 2</button>
+  <script>
+    //初始化接受参数
+    function receiveParameter(param) {
+      document.getElementById('paramDisplay').textContent = param;
+    }
+
+    function callHtmlMethod(param) {
+      alert('html 接收到了: ' + param);
+    }
+
+    function callFlutterMethod(method, parameter) {
+      FlutterChannel.postMessage(JSON.stringify({
+        method: method,
+        parameter: parameter
+      }));
+    }
+
+  </script>
+</body>
+
+</html>
