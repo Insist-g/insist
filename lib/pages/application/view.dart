@@ -5,6 +5,7 @@ import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:flutter_ducafecat_news_getx/pages/book/view.dart';
 import 'package:flutter_ducafecat_news_getx/pages/category/index.dart';
 import 'package:flutter_ducafecat_news_getx/pages/main/index.dart';
+import 'package:flutter_ducafecat_news_getx/pages/test/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -42,11 +43,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         MainPage(),
         CategoryPage(),
         BookPage(),
-        TextButton(
-            child: Text('log out'),
-            onPressed: () {
-              Get.offAllNamed(AppRoutes.SIGN_IN);
-            })
+        TestPage(),
       ],
       controller: controller.pageController,
       onPageChanged: controller.handlePageChanged,
