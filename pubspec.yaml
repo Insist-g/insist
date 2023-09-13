@@ -15,6 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# 天地图todo:Android SDK安全码组成 : SHA1+包名。
 version: 1.0.0+1
 
 environment:
@@ -111,6 +112,18 @@ dependencies:
 
   #高德地图定位
   amap_flutter_location: ^3.0.0
+
+  #加载瓦片地图
+  flutter_map: ^6.0.0-dev.2
+
+  #位置信息
+  geolocator: ^10.0.1
+
+  #桌面窗口
+  flutter_overlay_window: ^0.4.3
+
+  #坐标转换
+  proj4dart: ^2.1.0
 
   # 通过 scheme 打开APP 获取 参数
 #  uni_links: ^0.5.1

@@ -6,6 +6,7 @@ import 'package:flutter_ducafecat_news_getx/common/widgets/background.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/selecter.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/web.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
+import 'package:flutter_ducafecat_news_getx/pages/test/td_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'index.dart';
@@ -174,7 +175,9 @@ class SignInPage extends GetView<SignInController> {
       children: [
         IconButton(
           icon: Icon(AlIcon.kg, size: 40),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(TDPage());
+          },
         ),
         IconButton(
           icon: Icon(AlIcon.pxx, size: 40),

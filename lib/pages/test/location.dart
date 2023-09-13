@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/permission.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class GDLocation extends StatefulWidget {
   @override
@@ -21,6 +26,7 @@ class _GDLocationState extends State<GDLocation> {
   @override
   void initState() {
     super.initState();
+
     /// 设置是否已经包含高德隐私政策并弹窗展示显示用户查看，如果未包含或者没有弹窗展示，高德定位SDK将不会工作
     ///
     /// 高德SDK合规使用方案请参考官网地址：https://lbs.amap.com/news/sdkhgsy
@@ -57,7 +63,9 @@ class _GDLocationState extends State<GDLocation> {
     }
 
     ///注册定位结果监听
-    _locationListener = _locationPlugin.onLocationChanged().listen((Map<String, Object> result) {
+    _locationListener = _locationPlugin
+        .onLocationChanged()
+        .listen((Map<String, Object> result) {
       setState(() {
         _locationResult = result;
       });
@@ -90,7 +98,8 @@ class _GDLocationState extends State<GDLocation> {
     ///逆地理信息的语言类型
     locationOption.geoLanguage = GeoLanguage.DEFAULT;
 
-    locationOption.desiredLocationAccuracyAuthorizationMode = AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
+    locationOption.desiredLocationAccuracyAuthorizationMode =
+        AMapLocationAccuracyAuthorizationMode.ReduceAccuracy;
 
     locationOption.fullAccuracyPurposeKey = "AMapLocationScene";
 
@@ -194,23 +203,26 @@ class _GDLocationState extends State<GDLocation> {
 
     return new MaterialApp(
         home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text('AMap Location plugin example app'),
-          ),
-          body: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: widgets,
-          ),
-        ));
+      appBar: new AppBar(
+        title: new Text('AMap Location plugin example app'),
+      ),
+      body: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: widgets,
+      ),
+    ));
   }
 
   ///获取iOS native的accuracyAuthorization类型
   void requestAccuracyAuthorization() async {
-    AMapAccuracyAuthorization currentAccuracyAuthorization = await _locationPlugin.getSystemAccuracyAuthorization();
-    if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationFullAccuracy) {
+    AMapAccuracyAuthorization currentAccuracyAuthorization =
+        await _locationPlugin.getSystemAccuracyAuthorization();
+    if (currentAccuracyAuthorization ==
+        AMapAccuracyAuthorization.AMapAccuracyAuthorizationFullAccuracy) {
       print("精确定位类型");
-    } else if (currentAccuracyAuthorization == AMapAccuracyAuthorization.AMapAccuracyAuthorizationReducedAccuracy) {
+    } else if (currentAccuracyAuthorization ==
+        AMapAccuracyAuthorization.AMapAccuracyAuthorizationReducedAccuracy) {
       print("模糊定位类型");
     } else {
       print("未知定位类型");
@@ -245,5 +257,200 @@ class _GDLocationState extends State<GDLocation> {
         return false;
       }
     }
+  }
+}
+
+class FLMap extends StatefulWidget {
+  const FLMap({Key? key}) : super(key: key);
+
+  @override
+  State<FLMap> createState() => _FLMapState();
+}
+
+class _FLMapState extends State<FLMap> {
+  final String Key = '9640a1797b85caa77fef86ccea6947a1';
+  late MapController _mapController;
+  Position? position;
+
+  @override
+  void initState() {
+    super.initState();
+    _mapController = MapController();
+
+    PermissionUtil.getLocationStatus().then((value) async {
+      if (value)
+        await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high)
+            .then((value) => setState(() => position = value));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: position == null
+          ? Center(child: Text("loading.."))
+          : Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 8, bottom: 8),
+                    child: Text(
+                        'This is a map that is showing (${position!.latitude}, ${position!.longitude}).'),
+                  ),
+                  Flexible(
+                    child: FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        //WGS84
+                        //中心点
+                        initialCenter:
+                            LatLng(position!.latitude, position!.longitude),
+                        //第一次加载缩放大小
+                        initialZoom: 15,
+                        maxZoom: 18,
+                        //查看地图的限制
+                        cameraConstraint: CameraConstraint.contain(
+                          bounds: LatLngBounds(
+                            const LatLng(-90, -180),
+                            const LatLng(90, 180),
+                          ),
+                        ),
+                        // onTap: (TapPosition tapPosition, LatLng point) {
+                        //   Log().d(
+                        //       tapPosition.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onTap');
+                        // },
+                        // onLongPress: (TapPosition tapPosition, LatLng point) {
+                        //   Log().d(
+                        //       tapPosition.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onLongPress');
+                        // },
+                        onMapEvent: (MapEvent e) {
+                          Log().d(e.source.name, tag: 'onMapEvent');
+                        },
+                        onMapReady: () {
+                          Log().d('', tag: 'onMapReady');
+                        },
+                        // onPointerCancel: (
+                        //   PointerCancelEvent event,
+                        //   LatLng point,
+                        // ) {
+                        //   Log().d(
+                        //       event.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onPointerCancel');
+                        // },
+                        // onPointerDown: (PointerDownEvent event, LatLng point) {
+                        //   Log().d(
+                        //       event.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onPointerDown');
+                        // },
+                        // onPointerHover:
+                        //     (PointerHoverEvent event, LatLng point) {
+                        //   Log().d(
+                        //       event.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onPointerHover');
+                        // },
+                        // onPointerUp: (PointerUpEvent event, LatLng point) {
+                        //   Log().d(
+                        //       event.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onPointerUp');
+                        // },
+                        // onPositionChanged:
+                        //     (MapPosition position, bool hasGesture) {
+                        //   Log().d(
+                        //       position.toString() +
+                        //           "--- hasGesture:" +
+                        //           hasGesture.toString(),
+                        //       tag: 'onPointerUp');
+                        // },
+                        // onSecondaryTap:
+                        //     (TapPosition tapPosition, LatLng point) {
+                        //   Log().d(
+                        //       tapPosition.toString() +
+                        //           "--- LatLng:" +
+                        //           point.toJson().toString(),
+                        //       tag: 'onSecondaryTap');
+                        // },
+                      ),
+                      //与[children]相同，除了这些不受地图旋转的影响
+                      nonRotatedChildren: [
+                        RichAttributionWidget(
+                          popupInitialDisplayDuration:
+                              const Duration(seconds: 5),
+                          animationConfig: const ScaleRAWA(),
+                          attributions: [
+                            TextSourceAttribution(
+                              'OpenStreetMap contributors',
+                              // onTap: () => launchUrl(
+                              //   Uri.parse('https://openstreetmap.org/copyright'),
+                              // ),
+                            ),
+                            const TextSourceAttribution(
+                              'This attribution is the same throughout this app, except where otherwise specified',
+                              prependCopyright: false,
+                            ),
+                          ],
+                        ),
+                      ],
+                      children: [
+
+                        TileLayer(
+                          urlTemplate:
+                              'http://t{s}.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&markers=116.34867,39.94593|116.42626,39.94731|116.4551,39.90267|116.43381,39.86766|116.34249,39.87178|116.32807,39.90748&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=9640a1797b85caa77fef86ccea6947a1',
+                          userAgentPackageName: 'cn.com.guobaoyou.insist',
+                          subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                        ),
+                        // TileLayer(
+                        //   urlTemplate:
+                        //       'http://t{s}.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=9640a1797b85caa77fef86ccea6947a1',
+                        //   userAgentPackageName: 'cn.com.guobaoyou.insist',
+                        //   subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                        // ),
+                        // TileLayer(
+                        //   urlTemplate:
+                        //       'http://t{s}.tianditu.gov.cn/ibo_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ibo&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=9640a1797b85caa77fef86ccea6947a1',
+                        //   userAgentPackageName: 'cn.com.guobaoyou.insist',
+                        //   subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                        // ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(
+                                  position!.latitude, position!.longitude),
+                              builder: (ctx) => InkWell(
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  color: Colors.greenAccent,
+                                ),
+                                onTap: () {
+                                  Log().d(_mapController.zoom.toString());
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+    );
   }
 }
