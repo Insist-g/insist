@@ -1,150 +1,103 @@
-import 'dart:convert';
-
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/permission.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/map.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:get/get.dart';
 
-class TDPage extends StatefulWidget {
-  const TDPage();
+class CurrentPositionPage extends StatefulWidget {
+  const CurrentPositionPage({super.key});
 
   @override
-  State<TDPage> createState() => _TDPageState();
+  State<CurrentPositionPage> createState() => _CurrentPositionPageState();
 }
 
-class _TDPageState extends State<TDPage> {
-  late final WebViewController _webViewController;
-  bool isLoading = true; // 设置状态
+class _CurrentPositionPageState extends State<CurrentPositionPage>
+    with WidgetsBindingObserver {
+  static const String _kPortNameOverlay = 'OVERLAY';
+  static const String _kPortNameHome = 'UI';
+  final _receivePort = ReceivePort();
+  SendPort? homePort;
+  String? latestMessageFromOverlay;
 
   @override
   void initState() {
     super.initState();
-    _webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(_buildNavigationDelegate())
-      ..addJavaScriptChannel("FlutterChannel", onMessageReceived: (message) {
-        Log().d('Received message from JavaScript: ${message.message}',
-            tag: "😄");
-      })
-      ..loadFlutterAsset("assets/html/td_map.html");
-
-    // Future.delayed(Duration(seconds:20),()=> getPointLines());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    _initOverLay();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      floatingActionButton: IconButton(
-        icon: Icon(AlIcon.logo, size: 30),
-        onPressed: () => getPointLines(),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            WebViewWidget(
-              controller: _webViewController,
-            ),
-            if (isLoading)
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-          ],
-        ),
-      ),
+      body: TDMap(type: TDType.LOCATION, handleMessage: _sendHomePort),
     );
   }
 
-  NavigationDelegate _buildNavigationDelegate() {
-    return NavigationDelegate(
-      // onProgress: (int progress) =>
-      //     Log().d(progress.toString(), tag: 'onProgress'),
-      onPageStarted: (String url) =>
-          Log().d('Page started loading: $url', tag: 'onPageStarted'),
-      onWebResourceError: (error) =>
-          Log().d(error.toString(), tag: 'onWebResourceError'),
-      onPageFinished: (String url) {
-        setState(() => isLoading = false);
-        PermissionUtil.getLocationStatus().then((value) async {
-          if (value)
-            await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high)
-                .then((value) {
-              final parameter = {
-                "latitude": value.latitude,
-                "longitude": value.longitude,
-              };
-              String jsonString = Uri.encodeComponent(jsonEncode(parameter));
-              Log().d(parameter.toString());
-              _webViewController.runJavaScript('initParameter("$jsonString");');
-            });
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        // 应用程序不可见，但仍然在前台运行
+        break;
+      case AppLifecycleState.paused:
+        // 应用程序进入后台
+        // 在这里可以执行一些应用程序进入后台时的操作
+        if (await FlutterOverlayWindow.isActive()) return;
+        await FlutterOverlayWindow.showOverlay(
+          enableDrag: true,
+          overlayTitle: "X-SLAYER",
+          overlayContent: 'Overlay Enabled',
+          flag: OverlayFlag.defaultFlag,
+          visibility: NotificationVisibility.visibilityPublic,
+          positionGravity: PositionGravity.auto,
+          height: 500,
+          width: WindowSize.matchParent,
+        );
+        break;
+      case AppLifecycleState.resumed:
+        // 应用程序从后台返回前台
+        // 在这里可以执行一些应用程序返回前台时的操作
+        FlutterOverlayWindow.closeOverlay()
+            .then((value) => Log().d('STOPPED: alue: $value'));
+        break;
+      case AppLifecycleState.detached:
+        // 应用程序被暂时分离，可能会被销毁
+        break;
+    }
+  }
+
+  _initOverLay() {
+    WidgetsBinding.instance.addObserver(this);
+    if (homePort != null) return;
+    final res = IsolateNameServer.registerPortWithName(
+      _receivePort.sendPort,
+      _kPortNameHome,
+    );
+    Log().d("$res: OVERLAY");
+    _receivePort.listen((message) {
+      Log().d("message from OVERLAY: $message");
+      setState(() {
+        latestMessageFromOverlay = 'Latest Message From Overlay: $message';
+      });
+    });
+
+    FlutterOverlayWindow.isPermissionGranted().then((value) {
+      if (!value) {
+        FlutterOverlayWindow.requestPermission().then((value) {
+          if (!(value ?? false))
+            Get.snackbar("Tip:权限提示", "覆盖在其他应用上层权限未开启, 请手动开启");
         });
-      },
-      onNavigationRequest: (request) {
-        if (request.url.startsWith('https://www.youtube.com/')) {
-          return NavigationDecision.prevent;
-        }
-        return NavigationDecision.navigate;
-      },
+      }
+    });
+  }
+
+  _sendHomePort(String jsonString) {
+    homePort ??= IsolateNameServer.lookupPortByName(
+      _kPortNameOverlay,
     );
-  }
-
-  void _callHtmlMethodWithParam() async {
-    _webViewController
-      ..clearCache()
-      ..reload();
-    // const parameter = 'flutter 调用js方法并传入参数';
-    // await _webViewController.runJavaScript('callHtmlMethod("$parameter");');
-  }
-
-  getPointLines(){
-    final parameter = {
-      "points" : [
-        {
-          "latitude": 117.111272,
-          "longitude": 36.727387,
-        },
-        {
-          "latitude": 117.087375,
-          "longitude": 36.669173,
-        },
-      ],
-      "lines" : [
-        [
-          {
-            "longitude": 117.111272,
-            "latitude": 36.727387,
-          },
-          {
-            "longitude": 117.111558,
-            "latitude": 36.723864,
-          },
-          {
-            "longitude": 117.120972,
-            "latitude": 36.725021,
-          },
-          {
-            "longitude": 117.122427,
-            "latitude": 36.678291,
-          },
-          {
-            "longitude": 117.126488,
-            "latitude": 36.678736,
-          },
-        ]
-      ]
-    };
-    String jsonString = json.encode(parameter);
-    Log().d(jsonString);
-    Log().d(parameter.toString());
-    _webViewController
-        .runJavaScript('getPointLines($jsonString);');
+    homePort?.send('Date: ${DateTime.now()} $jsonString');
   }
 }

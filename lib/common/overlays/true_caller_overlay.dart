@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
 class TrueCallerOverlay extends StatefulWidget {
@@ -30,6 +31,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay> {
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((event) {
+      Log().d("=====>"+event);
       log("$event");
       setState(() {
         isGold = !isGold;

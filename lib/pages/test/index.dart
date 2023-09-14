@@ -28,7 +28,7 @@ class TestPage extends StatelessWidget {
           ),
           ListTile(
             title: Text("js加载天地图"),
-            onTap: () => Get.to(TDPage()),
+            onTap: () => Get.to(CurrentPositionPage()),
           ),
           ListTile(
             title: Text("桌面小窗口案例"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/overlays/true_caller_overlay.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
@@ -176,12 +177,14 @@ class SignInPage extends GetView<SignInController> {
         IconButton(
           icon: Icon(AlIcon.kg, size: 40),
           onPressed: () {
-            Get.to(TDPage());
+            Get.to(CurrentPositionPage());
           },
         ),
         IconButton(
           icon: Icon(AlIcon.pxx, size: 40),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(TrueCallerOverlay());
+          },
         ),
         IconButton(
           icon: Icon(AlIcon.xy, size: 40),
