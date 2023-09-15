@@ -146,9 +146,26 @@
             map = new T.Map("mapDiv");
             //设置显示地图的中心点和级别
             map.centerAndZoom(center, zoom);
+            map.setMinZoom(3);
             addMarker(data.longitude, data.latitude);
             console.log("initMap===> longitude:" + data.longitude + ", latitude:" + data.latitude);
         }
+
+        //获得当前放大等级
+        window['getZoom'] = () => {
+            console.log("getZoom===>" + map.getZoom());
+        }
+
+        //回到初始化中心点
+        window['backStarting'] = () => {
+            if (positionList.length > 0){
+                pos = positionList[positionList.length - 1];
+                map.panTo(pos);
+            }else {
+                map.panTo(center);
+            }
+        }
+
 
     </script>
 </head>

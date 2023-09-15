@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/channel/hi_channel.dart';
 import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/web.dart';
 import 'package:flutter_ducafecat_news_getx/pages/test/location.dart';
@@ -33,6 +34,12 @@ class TestPage extends StatelessWidget {
           ListTile(
             title: Text("桌面小窗口案例"),
             onTap: () => Get.to(WinPage()),
+          ),
+          ListTile(
+            title: Text("toast"),
+            onTap: () {
+              HIChannel.overlayAuth();
+            },
           )
         ],
       ),

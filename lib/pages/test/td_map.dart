@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_ducafecat_news_getx/common/channel/hi_channel.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/map.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -28,6 +29,14 @@ class _CurrentPositionPageState extends State<CurrentPositionPage>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    FlutterOverlayWindow.closeOverlay()
+        .then((value) => Log().d('STOPPED: alue: $value'));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
@@ -45,16 +54,18 @@ class _CurrentPositionPageState extends State<CurrentPositionPage>
       case AppLifecycleState.paused:
         // 应用程序进入后台
         // 在这里可以执行一些应用程序进入后台时的操作
+        if (!await FlutterOverlayWindow.isPermissionGranted()) return;
         if (await FlutterOverlayWindow.isActive()) return;
         await FlutterOverlayWindow.showOverlay(
-          enableDrag: true,
+          enableDrag: false,
           overlayTitle: "X-SLAYER",
           overlayContent: 'Overlay Enabled',
-          flag: OverlayFlag.defaultFlag,
+          flag: OverlayFlag.focusPointer,
           visibility: NotificationVisibility.visibilityPublic,
           positionGravity: PositionGravity.auto,
-          height: 500,
-          width: WindowSize.matchParent,
+          alignment: OverlayAlignment.centerRight,
+          height: 100,
+          width: 100,
         );
         break;
       case AppLifecycleState.resumed:
@@ -78,18 +89,13 @@ class _CurrentPositionPageState extends State<CurrentPositionPage>
     );
     Log().d("$res: OVERLAY");
     _receivePort.listen((message) {
+      if (message == 'openApp') HIChannel.openApp();
       Log().d("message from OVERLAY: $message");
-      setState(() {
-        latestMessageFromOverlay = 'Latest Message From Overlay: $message';
-      });
     });
 
     FlutterOverlayWindow.isPermissionGranted().then((value) {
       if (!value) {
-        FlutterOverlayWindow.requestPermission().then((value) {
-          if (!(value ?? false))
-            Get.snackbar("Tip:权限提示", "覆盖在其他应用上层权限未开启, 请手动开启");
-        });
+        _showBottomSheet();
       }
     });
   }
@@ -98,6 +104,40 @@ class _CurrentPositionPageState extends State<CurrentPositionPage>
     homePort ??= IsolateNameServer.lookupPortByName(
       _kPortNameOverlay,
     );
-    homePort?.send('Date: ${DateTime.now()} $jsonString');
+    homePort?.send(jsonString);
+  }
+
+  _showBottomSheet() {
+    Get.bottomSheet(Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("覆盖在其他应用上层权限未开启！"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text("取消")),
+              ElevatedButton(
+                  onPressed: () {
+                    FlutterOverlayWindow.requestPermission().then((value) {
+                      if (!(value ?? false))
+                        Get.snackbar("Tip:权限提示", "覆盖在其他应用上层权限未开启, 请手动开启");
+                    });
+                  },
+                  child: Text("打开"))
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }

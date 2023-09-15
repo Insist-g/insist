@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/services/storage.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/permission.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,10 +19,8 @@ class TDMap extends StatefulWidget {
 
 class _TDMapState extends State<TDMap> {
   late final WebViewController _webViewController;
-  List positionList = [];
   bool isLoading = true; // 设置状态
   StreamSubscription<Position>? _positionStream;
-  Timer? _timer;
   double defLongitude = 117.126542;
   double defLatitude = 36.658634;
 
@@ -37,8 +34,6 @@ class _TDMapState extends State<TDMap> {
   void dispose() {
     super.dispose();
     _positionStream?.cancel();
-    _timer?.cancel();
-    _timer = null;
   }
 
   @override
@@ -48,6 +43,12 @@ class _TDMapState extends State<TDMap> {
         children: [
           WebViewWidget(
             controller: _webViewController,
+          ),
+          Column(
+            children: [
+              ElevatedButton(onPressed: () => htmlGetZoom(), child: Text("getZoom")),
+              ElevatedButton(onPressed: () => htmlBackStarting(), child: Text("backStarting")),
+            ],
           ),
           if (isLoading)
             const Center(
@@ -117,52 +118,23 @@ class _TDMapState extends State<TDMap> {
             //when going to the background
             foregroundNotificationConfig: const ForegroundNotificationConfig(
               notificationText:
-                  "Example app will continue to receive your location even when you aren't using it",
+              "Example app will continue to receive your location even when you aren't using it",
               notificationTitle: "Running in Background",
               enableWakeLock: true,
             ))).listen(_positionStreamListener);
   }
 
-  _initTimer(Position? position) {
-    if (position != null) {
-      defLatitude = position.latitude;
-      defLongitude = position.longitude - 1;
-    }
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      defLongitude++;
-      final jsonString = json.encode({
-        "latitude": defLatitude,
-        "longitude": defLongitude,
-      });
-      _webViewController.runJavaScript('pushPosition($jsonString);');
-      if (widget.handleMessage != null) {
-        widget.handleMessage!(jsonString);
-      }
-    });
-  }
-
   _positionStreamListener(Position? position) {
     if (position != null) {
-      positionList.add({
-        "latitude": position.latitude,
-        "longitude": position.longitude,
-        "time": DateTime.now()
-      });
       final jsonString = json.encode({
         "latitude": position.latitude,
         "longitude": position.longitude,
       });
       _webViewController.runJavaScript('pushPosition($jsonString);');
-      Log().d(positionList.toString());
-      saveLog();
       if (widget.handleMessage != null) {
         widget.handleMessage!(jsonString);
       }
     }
-  }
-
-  saveLog() {
-    StorageService.to.setString("positionList", positionList.toString());
   }
 
   Future<Position?> _getPosition() async {
@@ -190,6 +162,15 @@ class _TDMapState extends State<TDMap> {
   htmlAddLines(_parameter) {
     _webViewController.runJavaScript('addLines($_parameter);');
   }
+
+  htmlGetZoom() {
+    _webViewController.runJavaScript('getZoom();');
+  }
+
+  htmlBackStarting() {
+    _webViewController.runJavaScript('backStarting();');
+  }
+
 }
 
 final pointList = [
