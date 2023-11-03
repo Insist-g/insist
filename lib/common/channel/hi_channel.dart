@@ -23,4 +23,5 @@ class HIChannel {
       Log().d(e.toString());
     });
   }
+
 }

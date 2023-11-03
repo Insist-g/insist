@@ -1,74 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/routers/routes.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
-import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
-import 'package:flutter_ducafecat_news_getx/pages/book/view.dart';
-import 'package:flutter_ducafecat_news_getx/pages/category/index.dart';
-import 'package:flutter_ducafecat_news_getx/pages/main/index.dart';
-import 'package:flutter_ducafecat_news_getx/pages/test/index.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'index.dart';
 
-class ApplicationPage extends GetView<ApplicationController> {
-  // 顶部导航
-  AppBar _buildAppBar() {
-    return transparentAppBar(
-        title: Obx(() => Text(
-              controller.tabTitles[controller.state.page]['title'],
-              style: TextStyle(
-                color: AppColors.primaryText,
-                fontFamily: 'Montserrat',
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            )),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: AppColors.primaryText,
-            ),
-            onPressed: () {},
-          )
-        ]);
+class ApplicationPage extends StatelessWidget {
+  const ApplicationPage({super.key});
+
+  Widget buildBody() {
+    return GetBuilder<ApplicationController>(builder: (logic) {
+      return Obx(() {
+        return IndexedStack(
+          children: logic.tabTitles.map((e) {
+            return e['page'] as Widget;
+          }).toList(),
+          index: logic.state.page,
+        );
+      });
+    });
   }
 
-  // 内容页
-  Widget _buildPageView() {
-    return PageView(
-      physics: NeverScrollableScrollPhysics(),
-      children: <Widget>[
-        MainPage(),
-        CategoryPage(),
-        BookPage(),
-        TestPage(),
-      ],
-      controller: controller.pageController,
-      onPageChanged: controller.handlePageChanged,
-    );
-  }
-
-  // 底部导航
-  Widget _buildBottomNavigationBar() {
-    return Obx(() => BottomNavigationBar(
-          items: controller.bottomTabs,
-          currentIndex: controller.state.page,
-          fixedColor: AppColors.primaryElement,
-          type: BottomNavigationBarType.fixed,
-          onTap: controller.handleNavBarTap,
-          // showSelectedLabels: false,
-          // showUnselectedLabels: false,
-        ));
+  Widget buildBottomBar() {
+    return GetBuilder<ApplicationController>(builder: (logic) {
+      return Obx(() => BottomNavigationBar(
+            currentIndex: logic.state.page,
+            fixedColor: AppColors.primaryElement,
+            type: BottomNavigationBarType.fixed,
+            onTap: logic.handlePageChanged,
+            items: logic.tabTitles
+                .map((e) => BottomNavigationBarItem(
+                      icon: Icon(
+                        e['icon'],
+                        color: AppColors.tabBarElement,
+                      ),
+                      activeIcon: Icon(
+                        e['icon'],
+                        color: AppColors.secondaryElementText,
+                      ),
+                      label: e['title'],
+                      backgroundColor: AppColors.primaryBackground,
+                    ))
+                .toList(),
+          ));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: _buildAppBar(),
-      body: _buildPageView(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+    Get.put(ApplicationController());
+    Widget scaffold = Scaffold(
+      body: buildBody(),
+      bottomNavigationBar: buildBottomBar(),
     );
+    Widget willPopScope = WillPopScope(
+      child: scaffold,
+      onWillPop: () async {
+        return false;
+      },
+    );
+    return willPopScope;
   }
 }

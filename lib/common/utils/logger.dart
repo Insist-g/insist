@@ -15,7 +15,7 @@ class Log {
 
   d(String? str, {String? tag, bool noStack = false}) {
     if (str == null) return;
-    noStack ? loggerNoStack.d(str) : logger.d((tag == null ? '' : tag+'=>' )+ str);
+    noStack ? loggerNoStack.d(str) : logger.d((tag == null ? '' : tag+'==>' )+ str);
   }
 }
 

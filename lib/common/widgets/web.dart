@@ -40,38 +40,25 @@ class _WebPageState extends State<WebPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: widget.title == null
-          ? null
-          : AppBar(
-              title: Text(widget.title!),
-            ),
-      floatingActionButton: IconButton(
-        icon: Icon(AlIcon.logo, size: 30),
-        onPressed: () => _callHtmlMethodWithParam(),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            WebViewWidget(
-              controller: _webViewController,
-            ),
-            if (isLoading)
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-            if (widget.title == null)
-              Positioned(
-                  top: 0,
-                  left: 20,
-                  child: IconButton(
-                    color: Colors.black,
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-                    onPressed: () => Get.back(),
-                  ))
-          ],
+    return Stack(
+      children: [
+        WebViewWidget(
+          controller: _webViewController,
         ),
-      ),
+        if (isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+        // if (widget.title == null)
+        //   Positioned(
+        //       top: 0,
+        //       left: 20,
+        //       child: IconButton(
+        //         color: Colors.black,
+        //         icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+        //         onPressed: () => Get.back(),
+        //       ))
+      ],
     );
   }
 

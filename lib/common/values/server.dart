@@ -1,7 +1,8 @@
 // baidu yapi
-// const SERVER_API_URL = 'https://yapi.baidu.com/mock/41008';
-// const SERVER_API_URL = 'https://yapi.ducafecat.tech/mock/11';
-const SERVER_API_URL = 'https://mock.apifox.cn/m1/1124717-0-default';
+// const SERVER_API_URL = 'http://192.168.1.31:48080';
+const SERVER_API_URL = 'http://192.168.1.35:48081';
+// const SERVER_API_URL = 'http://192.168.1.132:48080';
+// const SERVER_API_URL = 'https://dr.j6c.cn/prod-api';
 
-// 本地搭建 yapi
-// const SERVER_API_URL = 'http://yapi.ducafecat.tech/mock/11';
+const int RSP_OK = 0;
+const int NEED_LOGIN = 401;

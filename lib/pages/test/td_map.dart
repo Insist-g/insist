@@ -40,7 +40,7 @@ class _CurrentPositionPageState extends State<CurrentPositionPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: TDMap(type: TDType.LOCATION, handleMessage: _sendHomePort),
+      // body: TDMap(type: TDType.LOCATION, handleMessage: _sendHomePort),
     );
   }
 

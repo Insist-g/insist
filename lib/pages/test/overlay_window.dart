@@ -69,7 +69,7 @@ class _WinPageState extends State<WinPage> {
                   enableDrag: true,
                   overlayTitle: "X-SLAYER",
                   overlayContent: 'Overlay Enabled',
-                  flag: OverlayFlag.defaultFlag,
+                  flag: OverlayFlag.focusPointer,
                   visibility: NotificationVisibility.visibilityPublic,
                   positionGravity: PositionGravity.auto,
                   height: 500,

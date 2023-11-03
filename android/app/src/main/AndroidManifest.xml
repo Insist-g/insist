@@ -39,7 +39,6 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:enableOnBackInvokedCallback="true"

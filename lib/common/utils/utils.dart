@@ -1,9 +1,7 @@
 library utils;
 
 export 'validator.dart';
-export 'http.dart';
 export 'security.dart';
-export 'iconfont.dart';
 export 'date.dart';
 export 'logger.dart';
 export 'loading.dart';
@@ -14,16 +12,21 @@ import 'package:flutter_ducafecat_news_getx/common/widgets/widgets.dart';
 import 'package:get/get.dart';
 
 class Utils {
+  /// 隐藏键盘
+  static void hiddenKeyBorder([BuildContext? context]) =>
+      FocusScope.of(context ?? Get.context!).requestFocus(FocusNode());
+
   ///查看大图
   ///image 图片列表
   ///index 需要查看图片的下表
   static showViewBigPhoto(
-      {required List images, required index, required heroTag}) {
-    Get.to(PhotoViewGalleryScreen(
-      images: images,
-      heroTag: heroTag,
-      index: index,
-    ));
+      {required List images, required index, String heroTag = ""}) {
+    Get.to(() =>
+        PhotoViewGalleryScreen(
+          images: images,
+          heroTag: heroTag,
+          index: index,
+        ));
   }
 
   ///查看pdf
@@ -39,7 +42,7 @@ class Utils {
       _path = res.path;
     } else {
       var res =
-          await fromAsset(path, path.substring(path.lastIndexOf("/") + 1));
+      await fromAsset(path, path.substring(path.lastIndexOf("/") + 1));
       _path = res.path;
     }
     if (_path.isNotEmpty)
@@ -57,4 +60,5 @@ class Utils {
       FocusManager.instance.primaryFocus?.unfocus();
     }
   }
-}
+
+  }

@@ -1,131 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
+import 'package:flutter_ducafecat_news_getx/common/apis/apis.dart';
+import 'package:flutter_ducafecat_news_getx/common/entities/entities.dart';
+import 'package:flutter_ducafecat_news_getx/common/entities/response_entity.dart';
+import 'package:flutter_ducafecat_news_getx/common/store/position.dart';
+import 'package:flutter_ducafecat_news_getx/common/store/user.dart';
+import 'package:flutter_ducafecat_news_getx/common/store/web_socket.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/jpush.dart';
+import 'package:flutter_ducafecat_news_getx/common/utils/overlay.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
+import 'package:flutter_ducafecat_news_getx/pages/home/view.dart';
+import 'package:flutter_ducafecat_news_getx/pages/mine/view.dart';
 import 'package:get/get.dart';
-// import 'package:uni_links/uni_links.dart';
-
 import 'index.dart';
 
-class ApplicationController extends GetxController {
+class ApplicationController extends GetxController with WidgetsBindingObserver {
   ApplicationController();
 
-  /// 响应式成员变量
-
   final state = ApplicationState();
-
-  /// 成员变量
-
-  // tab 页标题
   late final List tabTitles;
 
-  // 页控制器
-  late final PageController pageController;
-
-  // 底部导航项目
-  late final List<BottomNavigationBarItem> bottomTabs;
-
-  /// 事件
-
-  // tab栏动画
-  void handleNavBarTap(int index) {
-    pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
-  }
-
-  // tab栏页码切换
   void handlePageChanged(int page) {
     state.page = page;
   }
 
-  // / scheme 内部打开
-  // bool isInitialUriIsHandled = false;
-  // StreamSubscription? uriSub;
-
-  // // 第一次打开
-  // Future<void> handleInitialUri() async {
-  //   if (!isInitialUriIsHandled) {
-  //     isInitialUriIsHandled = true;
-  //     try {
-  //       final uri = await getInitialUri();
-  //       if (uri == null) {
-  //         print('no initial uri');
-  //       } else {
-  //         // 这里获取了 scheme 请求
-  //         print('got initial uri: $uri');
-  //       }
-  //     } on PlatformException {
-  //       print('falied to get initial uri');
-  //     } on FormatException catch (err) {
-  //       print('malformed initial uri, ' + err.toString());
-  //     }
-  //   }
-  // }
-  //
-  // // 程序打开时介入
-  // void handleIncomingLinks() {
-  //   if (!kIsWeb) {
-  //     uriSub = uriLinkStream.listen((Uri? uri) {
-  //       // 这里获取了 scheme 请求
-  //       print('got uri: $uri');
-  //
-  //       // if (uri!.pathSegments[1].toLowerCase() == 'category') {
-  //       if (uri != null && uri.path == '/notify/category') {
-  //         Get.toNamed(AppRoutes.Category);
-  //       }
-  //     }, onError: (Object err) {
-  //       print('got err: $err');
-  //     });
-  //   }
-  // }
-
-  /// 生命周期
-
   @override
   void onInit() {
     super.onInit();
-    // handleInitialUri();
-    // handleIncomingLinks();
-    // 准备一些静态数据
+    WidgetsBinding.instance.addObserver(this);
     tabTitles = [
-      {'title': 'Welcome', 'icon': Iconfont.home},
-      {'title': 'Cagegory', 'icon': Iconfont.grid},
-      {'title': 'Bookmarks', 'icon': Iconfont.tag},
-      {'title': 'Account', 'icon': Iconfont.me}
+      {'title': '工作台', 'icon': Icons.home, 'page': HomePage()},
+      // {'title': '一张图', 'icon': Icons.interests},
+      {'title': '我的', 'icon': Icons.person, 'page': MinePage()}
     ];
-
-    bottomTabs = tabTitles
-        .map((e) => BottomNavigationBarItem(
-              icon: Icon(
-                e['icon'],
-                color: AppColors.tabBarElement,
-              ),
-              activeIcon: Icon(
-                e['icon'],
-                color: AppColors.secondaryElementText,
-              ),
-              label: e['title'],
-              backgroundColor: AppColors.primaryBackground,
-            ))
-        .toList();
-    pageController = PageController(initialPage: state.page);
   }
 
   @override
   void onReady() {
     super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+    checkToken();
   }
 
   @override
   void dispose() {
-    // uriSub?.cancel();
-    pageController.dispose();
-    FlutterBugly.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      if (PositionStore.to.isRunning) OverLayUtil().dismiss();
+    } else if (state == AppLifecycleState.paused) {
+      if (PositionStore.to.isRunning) OverLayUtil().show();
+    }
+  }
+
+  Future checkToken() async {
+    // ResponseEntity rsp = await UserAPI.checkToken();
+    // if (rsp.code == RSP_OK) {
+    //   final expiresTime = LoginResult.fromJson(rsp.data).expiresTime;
+    final expiresTime = UserStore.to.user?.expiresTime;
+    if (expiresTime != null) {
+      Duration difference = DateTime.fromMillisecondsSinceEpoch(expiresTime)
+          .difference(DateTime.now());
+      //token有效期24小时内并且大于0
+      if (difference.inHours < 24 && difference.inSeconds > 0) {
+        await UserStore.to.refreshToken();
+      } else {
+        UserStore.to.onLogout();
+      }
+    }
+  } // }
 }

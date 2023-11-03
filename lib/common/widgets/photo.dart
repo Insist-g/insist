@@ -1,11 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
+import 'package:flutter_ducafecat_news_getx/pages/test/test_upload.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
+import 'image_wrap.dart';
+
+//图片查看
 // ignore: must_be_immutable
 class PhotoViewGalleryScreen extends StatefulWidget {
   final List images;
@@ -13,13 +19,13 @@ class PhotoViewGalleryScreen extends StatefulWidget {
   final String heroTag;
   late PageController? controller;
 
-  PhotoViewGalleryScreen(
-      {Key? key,
-      required this.images,
-      this.index = 0,
-      this.controller,
-      required this.heroTag})
-      : super(key: key) {
+  PhotoViewGalleryScreen({
+    Key? key,
+    required this.images,
+    this.index = 0,
+    this.controller,
+    this.heroTag = "",
+  }) : super(key: key) {
     controller = PageController(initialPage: index);
   }
 
@@ -34,6 +40,12 @@ class _PhotoViewGalleryScreenState extends State<PhotoViewGalleryScreen> {
   void initState() {
     super.initState();
     currentIndex = widget.index;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller?.dispose();
   }
 
   @override
@@ -52,19 +64,41 @@ class _PhotoViewGalleryScreenState extends State<PhotoViewGalleryScreen> {
               scrollPhysics: const BouncingScrollPhysics(),
               builder: (BuildContext context, int index) {
                 // Uint8List bytes = convert.base64.decode(widget.images[index]);
-                return widget.images[index] is String
-                    ? PhotoViewGalleryPageOptions(
-                        imageProvider: widget.images[index].startsWith('http')
-                            ? CachedNetworkImageProvider(widget.images[index])
-                            : AssetImage(widget.images[index]) as ImageProvider,
-                        heroAttributes: widget.heroTag.isNotEmpty
-                            ? PhotoViewHeroAttributes(tag: widget.heroTag)
-                            : null,
-                      )
-                    : PhotoViewGalleryPageOptions(
+                if (widget.images[index] is String) {
+                  if (checkVideoFromURL(widget.images[index] ?? "")) {
+                    return PhotoViewGalleryPageOptions.customChild(
+                        child: VideoView(
+                      url: widget.images[index],
+                      isCover: false,
+                    ));
+                  }
+                  return PhotoViewGalleryPageOptions(
+                    imageProvider: widget.images[index].startsWith('http')
+                        ? CachedNetworkImageProvider(widget.images[index])
+                        : AssetImage(widget.images[index]) as ImageProvider,
+                    heroAttributes: widget.heroTag.isNotEmpty
+                        ? PhotoViewHeroAttributes(tag: widget.heroTag)
+                        : null,
+                  );
+                } else {
+                  if (checkVideoFromURL(
+                      (widget.images[index] as AssetEntity).mimeType ?? "")) {
+                    final AssetEntity _obj = widget.images[index];
+                    return PhotoViewGalleryPageOptions.customChild(
+                        child: VideoView(
+                      url: "${_obj.relativePath}/${_obj.title}",
+                      isCover: false,
+                    ));
+                  } else {
+                    return PhotoViewGalleryPageOptions(
                         imageProvider: AssetEntityImageProvider(
                             widget.images[index],
-                            isOriginal: true));
+                            isOriginal: true),
+                        heroAttributes: widget.heroTag.isNotEmpty
+                            ? PhotoViewHeroAttributes(tag: widget.heroTag)
+                            : null);
+                  }
+                }
               },
               itemCount: widget.images.length,
               loadingBuilder: (context, event) {
@@ -103,7 +137,7 @@ class _PhotoViewGalleryScreenState extends State<PhotoViewGalleryScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
             ),
           ),

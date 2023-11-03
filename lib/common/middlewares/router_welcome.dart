@@ -19,7 +19,7 @@ class RouteWelcomeMiddleware extends GetMiddleware {
     } else if (UserStore.to.isLogin == true) {
       return RouteSettings(name: AppRoutes.Application);
     } else {
-      return RouteSettings(name: AppRoutes.SIGN_IN);
+      return RouteSettings(name: AppRoutes.Login);
     }
   }
 }

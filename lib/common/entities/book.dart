@@ -1,52 +1,74 @@
 class GuiderWord {
-  String? name;
-  String? pdf;
+  String? title;
+  String? content;
+  String? createTime;
+  int? state;
+  String? location;
   List<String>? image;
-  List<Content>? content;
 
-  GuiderWord({this.name, this.image, this.content, this.pdf});
+  GuiderWord(
+      {this.state,
+      this.title,
+      this.content,
+      this.createTime,
+      this.image,
+      this.location});
 
   GuiderWord.fromJson(Map<String, dynamic> json) {
-    name = json["name"];
-    pdf = json["pdf"];
+    title = json["title"];
+    content = json["content"];
+    createTime = json["createTime"];
+    state = json["state"];
+    location = json["location"];
     image = json["image"] == null ? null : List<String>.from(json["image"]);
-    content = json["content"] == null
-        ? null
-        : (json["content"] as List).map((e) => Content.fromJson(e)).toList();
+  }
+}
+
+
+class Example {
+  String? name;
+  List<Aswitch>? aswitch;
+  String? remark;
+  List<String>? images;
+
+  Example({this.name, this.aswitch, this.remark, this.images});
+
+  Example.fromJson(Map<String, dynamic> json) {
+    name = json["name"];
+    aswitch = json["switch"] == null ? null : (json["switch"] as List).map((e) => Aswitch.fromJson(e)).toList();
+    remark = json["remark"];
+    images = json["images"] == null ? null : List<String>.from(json["images"]);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["name"] = name;
-    _data["pdf"] = pdf;
-    if (image != null) {
-      _data["image"] = image;
+    if(aswitch != null) {
+      _data["switch"] = aswitch?.map((e) => e.toJson()).toList();
     }
-    if (content != null) {
-      _data["content"] = content?.map((e) => e.toJson()).toList();
+    _data["remark"] = remark;
+    if(images != null) {
+      _data["images"] = images;
     }
     return _data;
   }
 }
 
-class Content {
+class Aswitch {
   String? title;
-  String? image;
-  String? str;
+  bool? select;
 
-  Content({this.title, this.image, this.str});
+  Aswitch({this.title, this.select});
 
-  Content.fromJson(Map<String, dynamic> json) {
+  Aswitch.fromJson(Map<String, dynamic> json) {
     title = json["title"];
-    image = json["image"];
-    str = json["str"];
+    select = json["select"];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["title"] = title;
-    _data["image"] = image;
-    _data["str"] = str;
+    _data["select"] = select;
     return _data;
   }
 }

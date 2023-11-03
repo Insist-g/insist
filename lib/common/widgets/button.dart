@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/style.dart';
 
 /// 扁平圆角按钮
 Widget btnFlatButtonWidget({
@@ -16,12 +16,12 @@ Widget btnFlatButtonWidget({
   FontWeight fontWeight = FontWeight.w400,
 }) {
   return Container(
-    width: width.w,
-    height: height.h,
+    width: width,
+    height: height,
     child: TextButton(
       style: ButtonStyle(
         textStyle: MaterialStateProperty.all(TextStyle(
-          fontSize: 16.sp,
+          fontSize: 16,
         )),
         foregroundColor: MaterialStateProperty.resolveWith(
           (states) {
@@ -51,7 +51,7 @@ Widget btnFlatButtonWidget({
           color: fontColor,
           fontFamily: fontName,
           fontWeight: fontWeight,
-          fontSize: fontSize.sp,
+          fontSize: fontSize,
           height: 1,
         ),
       ),
@@ -68,8 +68,8 @@ Widget btnFlatButtonBorderOnlyWidget({
   required String iconFileName,
 }) {
   return Container(
-    width: width.w,
-    height: height.h,
+    width: width,
+    height: height,
     child: TextButton(
       style: ButtonStyle(
         // textStyle: MaterialStateProperty.all(TextStyle(
@@ -237,3 +237,68 @@ class ButtonProController {
     _buttonProListener = null;
   }
 }
+//
+// //下拉选择按钮
+// class DownButton2 extends StatefulWidget {
+//   final List<String> items;
+//   final String defString;
+//   final double height;
+//   final double width;
+//
+//   const DownButton2({
+//     super.key,
+//     required this.items,
+//     this.defString = '默认',
+//     this.width = 100,
+//     this.height = 50,
+//   });
+//
+//   @override
+//   State<DownButton2> createState() => _DownButton2State();
+// }
+//
+// class _DownButton2State extends State<DownButton2> {
+//   String? selectedValue;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return DropdownButtonHideUnderline(
+//       child: DropdownButton2<String>(
+//         isExpanded: true,
+//         hint: Text(
+//           widget.defString,
+//           style: AppTextStyle.secondary_14,
+//         ),
+//         items: widget.items
+//             .map((String item) => DropdownMenuItem<String>(
+//                   value: item,
+//                   child: Text(
+//                     item,
+//                     style: AppTextStyle.secondary_14,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                 ))
+//             .toList(),
+//         value: selectedValue,
+//         onChanged: (String? value) {
+//           setState(() {
+//             selectedValue = value;
+//           });
+//         },
+//         buttonStyleData: ButtonStyleData(
+//             height: widget.height,
+//             width: widget.width,
+//             padding: const EdgeInsets.only(left: 14, right: 14),
+//             elevation: 0,
+//             decoration: BoxDecoration(color: Colors.white)),
+//         dropdownStyleData: DropdownStyleData(
+//           elevation: 0,
+//           maxHeight: 200,
+//           width: double.infinity,
+//           decoration: BoxDecoration(color: Colors.white),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//

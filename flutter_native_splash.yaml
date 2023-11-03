@@ -61,7 +61,7 @@ flutter_native_splash:
   #       要显示通知栏，在 Flutter 应用中添加以下代码：
   #       WidgetsFlutterBinding.ensureInitialized();
   #       SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  fullscreen: true
+  #fullscreen: true
 
   # 如果改变了 info.plist 的名字，可以使用 info_plist_files 指定对应的文件名。
   # 只需移除下面三行前面的 # 字符，不要移除任何空格：

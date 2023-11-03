@@ -3,8 +3,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
+import 'package:flutter_ducafecat_news_getx/common/style/style.dart';
+import 'package:flutter_ducafecat_news_getx/common/values/radii.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PDFPage extends StatefulWidget {
   final String path;
@@ -32,7 +36,9 @@ class _PDFPageState extends State<PDFPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
-            onPressed: () {},
+            onPressed: () {
+              Share.shareXFiles([XFile(widget.path)]);
+            },
           ),
         ],
       ),
@@ -47,9 +53,7 @@ class _PDFPageState extends State<PDFPage> {
             pageFling: true,
             pageSnap: true,
             defaultPage: currentPage!,
-            fitPolicy: FitPolicy.BOTH,
-            preventLinkNavigation:
-                false, // if set to true the link is handled in flutter
+            preventLinkNavigation: false, // if set to true the link is handled in flutter
             onRender: (_pages) {
               setState(() {
                 pages = _pages;
@@ -86,7 +90,14 @@ class _PDFPageState extends State<PDFPage> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : Container()
+                  : Positioned(bottom: 10,right: 10,child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: Radii.k20pxRadius,
+                color: AppColor.secondaryText
+            ),
+            child: Text('$currentPage/$pages', style: AppTextStyle.secondary_14.copyWith(color: Colors.white),),
+          ),)
               : Center(
                   child: Text(errorMessage),
                 )
@@ -103,7 +114,7 @@ class _PDFPageState extends State<PDFPage> {
       //         },
       //       );
       //     }
-
+      //
       //     return Container();
       //   },
       // ),

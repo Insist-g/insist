@@ -18,17 +18,17 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       elevation: 0,
       centerTitle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.primaryBackground,
       iconTheme: IconThemeData(
-        color: AppColor.primaryText,
+        color: AppColor.white,
       ),
       titleTextStyle: TextStyle(
-        color: AppColor.primaryText,
+        color: AppColor.white,
         fontSize: 20,
         fontWeight: FontWeight.w500,
       ),
       toolbarTextStyle: TextStyle(
-        color: AppColor.primaryText,
+        color: AppColor.white,
         fontSize: 20,
         fontWeight: FontWeight.w500,
       ),
