@@ -5,16 +5,12 @@ import 'package:flutter_ducafecat_news_getx/common/routers/names.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/color.dart';
 import 'package:flutter_ducafecat_news_getx/common/style/text_style.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/logger.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/navigation.dart';
 import 'package:flutter_ducafecat_news_getx/common/values/constant.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/app.dart';
-import 'package:flutter_ducafecat_news_getx/common/widgets/chart/bar_chart/view.dart';
+import 'package:flutter_ducafecat_news_getx/common/widgets/image.dart';
 import 'package:flutter_ducafecat_news_getx/common/widgets/item.dart';
 import 'package:flutter_ducafecat_news_getx/pages/home/logic.dart';
-import 'package:flutter_ducafecat_news_getx/pages/home/widget/item_banner.dart';
 import 'package:get/get.dart';
-import 'package:styled_widget/styled_widget.dart';
-import 'widget/item.dart';
 
 class HomePage extends GetView<HomeLogic> {
   @override
@@ -42,13 +38,10 @@ class HomePage extends GetView<HomeLogic> {
                 buildTip(),
                 buildMenu(),
                 buildTitle(title: "我的河道", route: AppRoutes.River),
-                buildRow(),
                 buildTitle(title: "我的巡察", route: AppRoutes.PatrolIndex),
                 buildCard(),
                 buildTitle(title: "巡河统计", route: AppRoutes.StatisticsIndex),
-                sliverMargin(
-                  child: BarChartView(),
-                ),
+
               ],
             ),
           ),
@@ -73,12 +66,10 @@ class HomePage extends GetView<HomeLogic> {
                 String url = item.attachFiles?.first.url ?? '';
                 Log().d(item.toJson().toString());
                 return InkWell(
-                  child: ItemBanner(
-                    imgUrl: url,
-                    title: item.title ?? '',
+                  child: netImageCached(
+                    item.title ?? '',
                   ),
                   onTap: () {
-                    controller.getNewsInfo(item.id);
                   },
                 );
               }).toList(),
@@ -163,31 +154,6 @@ class HomePage extends GetView<HomeLogic> {
         childAspectRatio: 1,
       ),
     );
-  }
-
-  Widget buildRow() {
-    return sliverMargin(
-        margin: EdgeInsets.only(top: 10),
-        child: Row(
-          children: controller.riverList.asMap().keys.map((index) {
-            return Expanded(
-              flex: 1,
-              child: itemRow(
-                margin: index == 0
-                    ? EdgeInsets.only(right: 5)
-                    : EdgeInsets.only(left: 5),
-                title: controller.riverList[index].riverName,
-                num: index == 0 ? "Ⅰ" : "Ⅱ",
-                color: index == 0 ? AppColor.pinkColor : AppColor.green,
-              ).gestures(onTap: () {
-                if (controller.riverList[index].id == null) return;
-                NavigationUtil.toRiverIndexPage(
-                    riverId: controller.riverList[index].id!,
-                    riverName: controller.riverList[index].riverName ?? "");
-              }),
-            );
-          }).toList(),
-        ));
   }
 
   Widget buildCard() {

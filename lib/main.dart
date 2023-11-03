@@ -10,30 +10,18 @@ import 'package:flutter_ducafecat_news_getx/global.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'common/widgets/overlay.dart';
 
 Future<void> main() async {
   await Global.init();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  initialization(null);
+  initialization();
   runApp(MyApp());
 }
 
-@pragma("vm:entry-point")
-void overlayMain() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: OverLayView(),
-    ),
-  );
-}
-
 //启动图延时移除方法
-void initialization(BuildContext? context) async {
-  await Future.delayed(const Duration(seconds: 1));
+void initialization({BuildContext? context}) async {
+  await Future.delayed(const Duration(milliseconds: 100));
   FlutterNativeSplash.remove();
 }
 

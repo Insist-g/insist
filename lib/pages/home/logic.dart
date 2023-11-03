@@ -1,13 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_ducafecat_news_getx/common/apis/home.dart';
-import 'package:flutter_ducafecat_news_getx/common/apis/patrol.dart';
-import 'package:flutter_ducafecat_news_getx/common/apis/river.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/message.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/patrol.dart';
 import 'package:flutter_ducafecat_news_getx/common/entities/river.dart';
 import 'package:flutter_ducafecat_news_getx/common/routers/names.dart';
-import 'package:flutter_ducafecat_news_getx/pages/home/message/info/view.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
@@ -95,30 +92,17 @@ class HomeLogic extends GetxController {
   }
 
   Future<List<RiverBean>> getRiverList() async {
-    var res = await RiverApi.getRiverList(pageNo: 1, pageSize: 2);
-    return res.data?.list ?? [];
+    // var res = await RiverApi.getRiverList(pageNo: 1, pageSize: 2);
+    return [];
   }
 
   Future<List<PatrolBean>> getPatrolList() async {
-    var res = await PatrolApi.getPatrolList(pageNo: 1, pageSize: 1);
-    return res.data?.list ?? [];
+    // var res = await PatrolApi.getPatrolList(pageNo: 1, pageSize: 1);
+    return [];
   }
 
   Future<List<MessageBean>> getNewsList() async {
     var res = await HomeApi.getNewsList(pageNo: 1);
     return res.data?.list ?? [];
   }
-
-  Future getNewsInfo(int? id) async {
-    if (id == null) return;
-    EasyLoading.show();
-    HomeApi.getNewsInfo(id: id).then((value) {
-      Get.to(() => MessageInfoPage(data: value.data));
-    }).onError<DioException>((error, stackTrace) {
-      EasyLoading.showError(error.message ?? '新闻失踪了..');
-    }).whenComplete(() {
-      EasyLoading.dismiss();
-    });
-  }
-
 }

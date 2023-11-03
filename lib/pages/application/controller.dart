@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ducafecat_news_getx/common/apis/apis.dart';
-import 'package:flutter_ducafecat_news_getx/common/entities/entities.dart';
-import 'package:flutter_ducafecat_news_getx/common/entities/response_entity.dart';
-import 'package:flutter_ducafecat_news_getx/common/store/position.dart';
 import 'package:flutter_ducafecat_news_getx/common/store/user.dart';
-import 'package:flutter_ducafecat_news_getx/common/store/web_socket.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/jpush.dart';
-import 'package:flutter_ducafecat_news_getx/common/utils/overlay.dart';
-import 'package:flutter_ducafecat_news_getx/common/values/values.dart';
 import 'package:flutter_ducafecat_news_getx/pages/home/view.dart';
 import 'package:flutter_ducafecat_news_getx/pages/mine/view.dart';
 import 'package:get/get.dart';
@@ -49,11 +41,6 @@ class ApplicationController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      if (PositionStore.to.isRunning) OverLayUtil().dismiss();
-    } else if (state == AppLifecycleState.paused) {
-      if (PositionStore.to.isRunning) OverLayUtil().show();
-    }
   }
 
   Future checkToken() async {

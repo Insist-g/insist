@@ -7,8 +7,6 @@ import 'package:flutter_ducafecat_news_getx/common/store/store.dart';
 import 'package:flutter_ducafecat_news_getx/common/utils/utils.dart';
 import 'package:get/get.dart';
 
-import 'common/store/position.dart';
-
 /// 全局静态数据
 class Global {
   /// 初始化
@@ -24,7 +22,6 @@ class Global {
     Get.put<ConfigStore>(ConfigStore());
     Get.put<UserStore>(UserStore());
     Get.put<DictStore>(DictStore());
-    Get.put<PositionStore>(PositionStore());
   }
 
   static void setSystemUi() {

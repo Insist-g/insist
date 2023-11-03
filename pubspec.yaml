@@ -99,20 +99,11 @@ dependencies:
   #位置信息
   geolocator: ^10.0.1
 
-  #桌面窗口
-  flutter_overlay_window: ^0.4.3
-
   # 刷新
   easy_refresh: ^3.3.2+1
 
   #图表
   fl_chart: ^0.63.0
-  
-  #加载瓦片地图
-  flutter_map: ^5.0.0
-  flutter_map_tappable_polyline: ^5.0.0
-  flutter_map_marker_popup: ^5.2.0
-  flutter_map_location_marker: ^7.0.5
 
   url_launcher: ^6.1.14
 
